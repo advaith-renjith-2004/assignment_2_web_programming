@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EL Herbs & Spices Shop | Premium Organic Spices</title>
+    <meta name="description" content="Discover premium organic spices, whole seeds, and herbal seasonings at EL Herbs and Spices Shop. Freshness guaranteed from garden to kitchen.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="brand">
+                <img src="images/logo.jpg" alt="EL Herbs & Spices Logo" class="shop-logo">
+                <div class="brand-text">
+                    <h1 class="shop-title">EL Herbs & Spices</h1>
+                    <p class="shop-tagline">Pure Organic Aromas • Authentic Quality • Farm Fresh</p>
+                </div>
+            </div>
+            <div class="header-contact-quick">
+                <span>📞 Order Hotline: +91 98470 12345</span>
+                <span class="badge open-badge">⚡ Open Today (8 AM - 8 PM)</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#pricelist">Price List</a></li>
+                <li><a href="#enquiry">Customer Enquiry</a></li>
+                <li><a href="admin.html" class="admin-link">🔑 Admin Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <span class="hero-subtitle">Handpicked & Sun-Dried</span>
+            <h2>Exquisite Spices from the Heart of Kerala</h2>
+            <p>Elevate your culinary creations with our 100% natural, ethically sourced spices, whole seeds, and authentic herbal blends.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn btn-primary">Explore Products</a>
+                <a href="#pricelist" class="btn btn-outline">View Price List</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <!-- Products Grid Section -->
+        <section id="products" class="products-section">
+            <div class="section-header">
+                <h2>Our Featured Spices</h2>
+                <p class="section-desc">Hand-selected premium organic spices direct from local farmers</p>
+                <div class="filter-controls">
+                    <button class="filter-btn active" onclick="filterCategory('All')">All Spices</button>
+                    <button class="filter-btn" onclick="filterCategory('Whole Spices')">Whole Spices</button>
+                    <button class="filter-btn" onclick="filterCategory('Ground Spices')">Ground Spices</button>
+                    <button class="filter-btn" onclick="filterCategory('Herbs')">Herbs</button>
+                </div>
+            </div>
+
+            <!-- Product Cards Area (Arranged with CSS Grid & Box Model) -->
+            <div class="product-grid" id="product-grid-container">
+                <!-- Static Fallback / Day 1 HTML Product Cards -->
+                <article class="product-card" data-category="Whole Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/cardamom.jpg" alt="Green Cardamom Pods">
+                        <span class="badge stock-in">In Stock (25 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Whole Spices</span>
+                        <h3 class="product-name">Cardamom (Elaichi)</h3>
+                        <p class="product-desc">Premium organic green cardamom pods from the hills of Western Ghats with rich aroma.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 250g</span>
+                                <span class="price-value">₹450</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Cardamom')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Ground Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/turmeric.jpg" alt="Turmeric Powder">
+                        <span class="badge stock-in">In Stock (50 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Ground Spices</span>
+                        <h3 class="product-name">Turmeric Powder (Haldi)</h3>
+                        <p class="product-desc">High-curcumin golden turmeric powder, 100% pure, unadulterated and sun-dried.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 500g</span>
+                                <span class="price-value">₹180</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Turmeric Powder')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Whole Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/black_pepper.jpg" alt="Black Pepper">
+                        <span class="badge stock-in">In Stock (40 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Whole Spices</span>
+                        <h3 class="product-name">Black Pepper (Kali Mirch)</h3>
+                        <p class="product-desc">Bold Tellicherry black peppercorns known for pungent heat and rich aroma.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 250g</span>
+                                <span class="price-value">₹320</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Black Pepper')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Whole Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/cinnamon.jpg" alt="Cinnamon Sticks">
+                        <span class="badge stock-low">Low Stock (15 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Whole Spices</span>
+                        <h3 class="product-name">Cinnamon Sticks (Dalchini)</h3>
+                        <p class="product-desc">Sweet Ceylon cinnamon rolls, perfect for baking, teas, and savory curries.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 200g</span>
+                                <span class="price-value">₹280</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Cinnamon Sticks')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Whole Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/clove.jpg" alt="Cloves">
+                        <span class="badge stock-low">Low Stock (8 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Whole Spices</span>
+                        <h3 class="product-name">Clove (Laung)</h3>
+                        <p class="product-desc">Handpicked whole aromatic cloves packed with essential oils and intense flavor.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 100g</span>
+                                <span class="price-value">₹550</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Clove')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Ground Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/ginger_powder.jpg" alt="Ginger Powder">
+                        <span class="badge stock-in">In Stock (30 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Ground Spices</span>
+                        <h3 class="product-name">Ginger Powder (Saunth)</h3>
+                        <p class="product-desc">Finely ground dry ginger powder ideal for herbal teas, baking, and cooking.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 250g</span>
+                                <span class="price-value">₹150</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Ginger Powder')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Herbs">
+                    <div class="card-image-wrapper">
+                        <img src="images/bay_leaf.jpg" alt="Bay Leaf">
+                        <span class="badge stock-out">Out of Stock</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Herbs</span>
+                        <h3 class="product-name">Bay Leaf (Tej Patta)</h3>
+                        <p class="product-desc">Sun-dried natural bay leaves imparting rich herbal aroma to soups and biryanis.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 100g</span>
+                                <span class="price-value">₹90</span>
+                            </div>
+                            <button class="btn-cart disabled" disabled>Out of Stock</button>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-category="Whole Spices">
+                    <div class="card-image-wrapper">
+                        <img src="images/nutmeg.jpg" alt="Nutmeg">
+                        <span class="badge stock-low">Low Stock (12 kg)</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category-tag">Whole Spices</span>
+                        <h3 class="product-name">Nutmeg (Jaiphal)</h3>
+                        <p class="product-desc">Whole aromatic nutmeg seeds providing warm, nutty flavor for sweet & savory dishes.</p>
+                        <div class="card-footer">
+                            <div class="price-container">
+                                <span class="price-label">Price / 150g</span>
+                                <span class="price-value">₹420</span>
+                            </div>
+                            <button class="btn-cart" onclick="addToCart('Nutmeg')">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Price List Table Section -->
+        <section id="pricelist" class="pricelist-section">
+            <div class="section-header">
+                <h2>Complete Product Price List</h2>
+                <p class="section-desc">Transparent pricing and inventory availability catalog</p>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Unit Weight</th>
+                            <th>Price (₹)</th>
+                            <th>GST (5%)</th>
+                            <th>Price Incl. GST</th>
+                            <th>Stock Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#EL-001</td>
+                            <td><strong>Cardamom (Elaichi)</strong></td>
+                            <td><span class="tag tag-whole">Whole Spices</span></td>
+                            <td>250g</td>
+                            <td>₹450.00</td>
+                            <td>₹22.50</td>
+                            <td>₹472.50</td>
+                            <td><span class="status-indicator status-in">In Stock (25 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-002</td>
+                            <td><strong>Turmeric Powder (Haldi)</strong></td>
+                            <td><span class="tag tag-ground">Ground Spices</span></td>
+                            <td>500g</td>
+                            <td>₹180.00</td>
+                            <td>₹9.00</td>
+                            <td>₹189.00</td>
+                            <td><span class="status-indicator status-in">In Stock (50 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-003</td>
+                            <td><strong>Black Pepper (Kali Mirch)</strong></td>
+                            <td><span class="tag tag-whole">Whole Spices</span></td>
+                            <td>250g</td>
+                            <td>₹320.00</td>
+                            <td>₹16.00</td>
+                            <td>₹336.00</td>
+                            <td><span class="status-indicator status-in">In Stock (40 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-004</td>
+                            <td><strong>Cinnamon Sticks (Dalchini)</strong></td>
+                            <td><span class="tag tag-whole">Whole Spices</span></td>
+                            <td>200g</td>
+                            <td>₹280.00</td>
+                            <td>₹14.00</td>
+                            <td>₹294.00</td>
+                            <td><span class="status-indicator status-low">Low Stock (15 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-005</td>
+                            <td><strong>Clove (Laung)</strong></td>
+                            <td><span class="tag tag-whole">Whole Spices</span></td>
+                            <td>100g</td>
+                            <td>₹550.00</td>
+                            <td>₹27.50</td>
+                            <td>₹577.50</td>
+                            <td><span class="status-indicator status-low">Low Stock (8 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-006</td>
+                            <td><strong>Ginger Powder (Saunth)</strong></td>
+                            <td><span class="tag tag-ground">Ground Spices</span></td>
+                            <td>250g</td>
+                            <td>₹150.00</td>
+                            <td>₹7.50</td>
+                            <td>₹157.50</td>
+                            <td><span class="status-indicator status-in">In Stock (30 kg)</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-007</td>
+                            <td><strong>Bay Leaf (Tej Patta)</strong></td>
+                            <td><span class="tag tag-herbs">Herbs</span></td>
+                            <td>100g</td>
+                            <td>₹90.00</td>
+                            <td>₹4.50</td>
+                            <td>₹94.50</td>
+                            <td><span class="status-indicator status-out">Out of Stock</span></td>
+                        </tr>
+                        <tr>
+                            <td>#EL-008</td>
+                            <td><strong>Nutmeg (Jaiphal)</strong></td>
+                            <td><span class="tag tag-whole">Whole Spices</span></td>
+                            <td>150g</td>
+                            <td>₹420.00</td>
+                            <td>₹21.00</td>
+                            <td>₹441.00</td>
+                            <td><span class="status-indicator status-low">Low Stock (12 kg)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Customer Enquiry Form Section -->
+        <section id="enquiry" class="enquiry-section">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Customer Enquiry & Order Request</h2>
+                    <p>Have questions about bulk orders, wholesale pricing, or spice custom blends? Send us a message!</p>
+                </div>
+                
+                <form id="enquiryForm" class="enquiry-form" onsubmit="handleFormSubmit(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" name="fullName" placeholder="e.g. Advaith Renjith" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddress">Email Address <span class="required">*</span></label>
+                            <input type="email" id="emailAddress" name="emailAddress" placeholder="e.g. user@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNum">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phoneNum" name="phoneNum" placeholder="e.g. +91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="interestCategory">Spice Interest Category</label>
+                            <select id="interestCategory" name="interestCategory">
+                                <option value="Whole Spices">Whole Spices (Cardamom, Pepper, Clove, etc.)</option>
+                                <option value="Ground Spices">Ground Spices (Turmeric, Ginger Powder)</option>
+                                <option value="Herbs">Herbs & Leafy Seasonings</option>
+                                <option value="Bulk Order">Wholesale / Bulk Order Enquiry</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderQuantity">Estimated Quantity Required (in kg)</label>
+                        <input type="number" id="orderQuantity" name="orderQuantity" min="1" max="500" placeholder="e.g. 5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="messageText">Enquiry Details / Delivery Address <span class="required">*</span></label>
+                        <textarea id="messageText" name="messageText" rows="4" placeholder="Mention specific requirements, quantity, or shipping preferences..." required></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter" name="newsletter" checked>
+                            Subscribe to EL Herbs price updates and seasonal spice discounts
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-submit">Submit Enquiry Request</button>
+                        <button type="reset" class="btn btn-reset">Reset Form</button>
+                    </div>
+
+                    <div id="formFeedback" class="form-feedback"></div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="images/logo.jpg" alt="Logo" class="footer-logo">
+                    <h3>EL Herbs & Spices Shop</h3>
+                </div>
+                <p>Bringing authentic aroma, traditional spice grinding quality, and pure natural goodness to kitchens worldwide since 2024.</p>
+            </div>
+
+            <div class="footer-col address-col">
+                <h4>📍 Shop Address & Contact</h4>
+                <address>
+                    EL Herbs and Spices Boutique<br>
+                    Spice Street, Nalanchira, Trivandrum<br>
+                    Kerala - 695015, India<br>
+                    <strong>Email:</strong> info@elherbsspices.com<br>
+                    <strong>Phone:</strong> +91 98470 12345 / 0471 2530900
+                </address>
+            </div>
+
+            <div class="footer-col links-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products Catalog</a></li>
+                    <li><a href="#pricelist">Price List Table</a></li>
+                    <li><a href="#enquiry">Customer Enquiry</a></li>
+                    <li><a href="admin.html">Admin Inventory Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col hours-col">
+                <h4>🕒 Business Hours</h4>
+                <p><strong>Monday - Saturday:</strong> 8:00 AM – 8:00 PM</p>
+                <p><strong>Sunday:</strong> 9:00 AM – 2:00 PM</p>
+                <p class="academic-note">23EEL43H Web Programming • Assignment # 2</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 EL Herbs and Spices Shop. All Rights Reserved. Mar Baselios College of Engineering & Technology.</p>
+        </div>
+    </footer>
+
+    <!-- Linked External JavaScript File for Day 2 -->
+    <script src="js/app.js"></script>
+</body>
+</html>

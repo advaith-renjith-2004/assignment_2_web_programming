@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Cardamom (Elaichi)",
+    "price": 450,
+    "stock": 25,
+    "category": "Whole Spices",
+    "image": "images/cardamom.jpg",
+    "description": "Premium organic green cardamom pods from the hills of Western Ghats with rich fragrance."
+  },
+  {
+    "id": 2,
+    "name": "Turmeric Powder (Haldi)",
+    "price": 180,
+    "stock": 50,
+    "category": "Ground Spices",
+    "image": "images/turmeric.jpg",
+    "description": "High-curcumin golden turmeric powder, 100% pure and sun-dried."
+  },
+  {
+    "id": 3,
+    "name": "Black Pepper (Kali Mirch)",
+    "price": 320,
+    "stock": 40,
+    "category": "Whole Spices",
+    "image": "images/black_pepper.jpg",
+    "description": "Bold Tellicherry black peppercorns known for pungent heat and aroma."
+  },
+  {
+    "id": 4,
+    "name": "Cinnamon Sticks (Dalchini)",
+    "price": 280,
+    "stock": 15,
+    "category": "Whole Spices",
+    "image": "images/cinnamon.jpg",
+    "description": "Sweet Ceylon cinnamon rolls, perfect for baking and savory curries."
+  },
+  {
+    "id": 5,
+    "name": "Clove (Laung)",
+    "price": 550,
+    "stock": 8,
+    "category": "Whole Spices",
+    "image": "images/clove.jpg",
+    "description": "Handpicked whole aromatic cloves packed with essential oils and intense flavor."
+  },
+  {
+    "id": 6,
+    "name": "Ginger Powder (Saunth)",
+    "price": 150,
+    "stock": 30,
+    "category": "Ground Spices",
+    "image": "images/ginger_powder.jpg",
+    "description": "Finely ground dry ginger powder ideal for herbal teas, baking, and cooking."
+  },
+  {
+    "id": 7,
+    "name": "Bay Leaf (Tej Patta)",
+    "price": 90,
+    "stock": 0,
+    "category": "Herbs",
+    "image": "images/bay_leaf.jpg",
+    "description": "Sun-dried natural bay leaves imparting rich herbal aroma to soups and biryanis."
+  },
+  {
+    "id": 8,
+    "name": "Nutmeg (Jaiphal)",
+    "price": 420,
+    "stock": 12,
+    "category": "Whole Spices",
+    "image": "images/nutmeg.jpg",
+    "description": "Whole aromatic nutmeg seeds providing warm, nutty flavor for sweet and savory dishes."
+  }
+]
