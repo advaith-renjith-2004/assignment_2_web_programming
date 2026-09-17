@@ -1,0 +1,43 @@
+# ==============================================================================
+# EL Herbs & Spices Shop - .gitignore
+# Course: 23EEL43H Web Programming | Week 3 - Day 3 Task 1
+# ==============================================================================
+
+# 1. Dependency Directory:
+# node_modules contains third-party NPM packages which can be reinstalled via 'npm install'.
+# Committing this bloats the repository and causes cross-platform binary incompatibilities.
+node_modules/
+
+# 2. Environment Variables & Secrets:
+# .env contains sensitive API credentials, database URIs, and secret tokens.
+# Must never be pushed to version control to prevent security vulnerabilities and credential leaks.
+.env
+.env.local
+.env.*.local
+
+# 3. Log Files:
+# Runtime logs generated during server execution or debugging.
+# They change constantly and do not belong in source code tracking.
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 4. Operating System Generated Files:
+# OS-specific cache and metadata files created automatically by file managers.
+# macOS Finder metadata:
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows thumbnail caches and desktop configurations:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 5. IDE and Editor Configuration Directories:
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
