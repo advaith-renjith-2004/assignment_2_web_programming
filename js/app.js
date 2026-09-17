@@ -840,6 +840,105 @@ function initWeek2Day5FormValidation() {
 initWeek2Day5FormValidation();
 console.groupEnd();
 
+// ==========================================================================
+// WEEK 3 - DAY 1: JSON AND THE FETCH API
+// ==========================================================================
+console.group("%c--- Week 3 Day 1: JSON & Fetch API ---", "color: #06b6d4; font-weight: bold;");
+
+// Task 1: loadProducts() using fetch(), response.ok, response.json()
+function loadProducts() {
+    console.log("Initiating fetch() request for data/products.json...");
+    return fetch('data/products.json')
+        .then(response => {
+            console.log(`Fetch response received. Status: ${response.status}, OK: ${response.ok}`);
+            if (!response.ok) {
+                throw new Error(`HTTP network error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(fetchedProducts => {
+            console.log("Successfully parsed products from JSON:", fetchedProducts);
+            renderProducts(fetchedProducts);
+            return fetchedProducts;
+        })
+        .catch(err => {
+            console.error("Error loading products via fetch:", err.message);
+        });
+}
+loadProducts();
+
+// Task 2: Save cart in localStorage via JSON.stringify(), read back with JSON.parse() inside try...catch
+let cart = [];
+
+function loadCartFromStorage() {
+    try {
+        const storedCart = localStorage.getItem('el_herbs_cart');
+        if (storedCart) {
+            cart = JSON.parse(storedCart);
+            console.log(`Loaded ${cart.length} items from localStorage cart:`, cart);
+        } else {
+            cart = [];
+            console.log("No existing cart found in localStorage, initialized empty cart.");
+        }
+    } catch (e) {
+        console.error("Error parsing cart from localStorage with JSON.parse():", e.message);
+        cart = []; // Fallback to empty array if corrupted
+    }
+}
+loadCartFromStorage();
+
+function saveCartToStorage() {
+    try {
+        localStorage.setItem('el_herbs_cart', JSON.stringify(cart));
+        console.log("Cart saved to localStorage via JSON.stringify():", cart);
+    } catch (e) {
+        console.error("Error saving cart to localStorage:", e.message);
+    }
+}
+
+// Enhance Add-to-Cart clicks to update localStorage cart
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('btn-cart') && !e.target.disabled) {
+        const id = parseInt(e.target.getAttribute('data-id'), 10);
+        const name = e.target.getAttribute('data-name') || 'Spice Item';
+        cart.push({ id, name, timestamp: new Date().toISOString() });
+        saveCartToStorage();
+    }
+});
+
+// Task 3: JSON Syntax Error Observations & 404 Fetch Demonstration
+/*
+-----------------------------------------------------------------------------
+JSON ERROR OBSERVATIONS (Task 3):
+1. Single Quotes error:
+   Invalid JSON: { 'name': 'Cardamom' }
+   Error: SyntaxError: Expected property name or '}' in JSON (JSON standard strictly mandates double quotes "")
+2. Trailing Comma error:
+   Invalid JSON: [ { "id": 1 }, ]
+   Error: SyntaxError: Unexpected token ']' in JSON at position ... (JSON forbids trailing commas)
+3. Unquoted Key error:
+   Invalid JSON: { name: "Cardamom" }
+   Error: SyntaxError: Expected double-quoted property name in JSON at line ...
+-----------------------------------------------------------------------------
+*/
+
+// Demonstration of 404 response on non-existent file
+function demo404Fetch() {
+    fetch('data/non_existent_spice_catalog.json')
+        .then(response => {
+            console.log("Demonstrating 404 Fetch Check:");
+            console.log(`  Target URL: data/non_existent_spice_catalog.json`);
+            console.log(`  response.ok: ${response.ok} (Expected: false)`);
+            console.log(`  response.status: ${response.status} (Expected: 404 Not Found)`);
+        })
+        .catch(err => {
+            console.log("Network error caught in 404 test:", err.message);
+        });
+}
+demo404Fetch();
+console.groupEnd();
+
+
 
 
 
