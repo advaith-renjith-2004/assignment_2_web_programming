@@ -65,12 +65,16 @@
             <div class="section-header">
                 <h2>Our Featured Spices</h2>
                 <p class="section-desc">Hand-selected premium organic spices direct from local farmers</p>
+                <div class="search-bar-wrap">
+                    <input type="text" id="spiceSearch" class="search-input" placeholder="🔍 Search spices (Press Enter to search, Esc to clear)...">
+                </div>
                 <div class="filter-controls">
                     <button class="filter-btn active" onclick="filterCategory('All')">All Spices</button>
                     <button class="filter-btn" onclick="filterCategory('Whole Spices')">Whole Spices</button>
                     <button class="filter-btn" onclick="filterCategory('Ground Spices')">Ground Spices</button>
                     <button class="filter-btn" onclick="filterCategory('Herbs')">Herbs</button>
                 </div>
+                <div id="cartMessageToast" class="cart-toast" style="display:none;"></div>
             </div>
 
             <!-- Empty Product Cards Area dynamically rendered by renderProducts() -->

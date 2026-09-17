@@ -347,3 +347,107 @@ EXPLANATION: textContent vs innerHTML
 */
 console.groupEnd();
 
+// ==========================================================================
+// WEEK 2 - DAY 2: EVENT HANDLING
+// ==========================================================================
+console.group("%c--- Week 2 Day 2: Event Handling ---", "color: #a855f7; font-weight: bold;");
+
+// Task 1 & Task 2: Setup Event Listeners, print event objects, note 3 properties in comments
+function initWeek2Day2Events() {
+    // 1. Click on "Add to Cart" button -> shows message
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('btn-cart') && !e.target.disabled) {
+            // Task 2: Print event object and note 3 properties in comments
+            console.log("Cart Button Click Event Object:", e);
+            /*
+            EVENT PROPERTIES NOTED (Task 2):
+            1. e.type: The string representing the event type, here 'click'.
+            2. e.target: The DOM element that triggered the event, here the <button class="btn-cart">.
+            3. e.clientX / e.clientY: Coordinates of mouse click relative to viewport.
+            */
+            const prodName = e.target.getAttribute('data-name') || 'Spice Item';
+            const toast = document.getElementById('cartMessageToast');
+            if (toast) {
+                toast.style.display = 'inline-block';
+                toast.textContent = `🛒 Added "${prodName}" to your shopping basket!`;
+                setTimeout(() => { toast.style.display = 'none'; }, 3500);
+            }
+        }
+    });
+
+    // 2. Mouse hover on product card -> adds and removes 'zoom' class
+    const productGrid = document.getElementById('productGrid');
+    if (productGrid) {
+        productGrid.addEventListener('mouseover', function(e) {
+            const card = e.target.closest('.product-card');
+            if (card) {
+                card.classList.add('zoom');
+                // Task 2: Event properties: e.type ('mouseover'), e.target, e.currentTarget
+            }
+        });
+
+        productGrid.addEventListener('mouseout', function(e) {
+            const card = e.target.closest('.product-card');
+            if (card) {
+                card.classList.remove('zoom');
+            }
+        });
+    }
+
+    // 3. Key press in search box -> reacts to Enter key and clears on Escape key
+    const searchBox = document.getElementById('spiceSearch');
+    if (searchBox) {
+        searchBox.addEventListener('keydown', function(e) {
+            // Task 2: Print KeyboardEvent object and note properties
+            console.log("Search Keydown Event Object:", e);
+            /*
+            EVENT PROPERTIES NOTED (Task 2):
+            1. e.type: String name of event, here 'keydown'.
+            2. e.target: The <input id="spiceSearch"> element where key was typed.
+            3. e.key: The value of the key pressed ('Enter', 'Escape', 'a', etc.).
+            */
+            if (e.key === 'Enter') {
+                const query = searchBox.value.trim().toLowerCase();
+                console.log(`Reacted to Enter key. Searching for: "${query}"`);
+                const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+                renderProducts(filtered);
+            } else if (e.key === 'Escape') {
+                searchBox.value = '';
+                console.log("Reacted to Escape key. Search input cleared.");
+                renderProducts(products);
+            }
+        });
+    }
+
+    // Task 3: Form submission with event.preventDefault()
+    const enquiryForm = document.getElementById('enquiryForm');
+    if (enquiryForm) {
+        enquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevents browser page reload on submit
+            console.log("Form submit event intercepted with event.preventDefault():", e);
+            /*
+            -------------------------------------------------------------------------
+            COMMENT: WHY addEventListener IS PREFERRED OVER onclick ATTRIBUTE (Task 3)
+            -------------------------------------------------------------------------
+            1. Separation of Concerns: Keeps HTML markup clean and declarative while
+               housing JavaScript logic in dedicated script files.
+            2. Multiple Listeners: addEventListener allows attaching multiple independent
+               handlers to the same element for the same event without overwriting existing ones.
+            3. Event Propagation Control: Supports standard event capturing and bubbling phases
+               (via the third capture boolean/options argument) which inline onclick cannot do.
+            4. Memory Management & Cleanliness: Handlers can be dynamically removed using
+               removeEventListener and can pass options like { once: true }.
+            -------------------------------------------------------------------------
+            */
+            const feedback = document.getElementById('formFeedback');
+            const name = document.getElementById('fullName') ? document.getElementById('fullName').value : 'Customer';
+            if (feedback) {
+                feedback.className = 'form-feedback success';
+                feedback.innerHTML = `<strong>Thank you, ${name}!</strong> Your enquiry has been received safely without page reload via event.preventDefault().`;
+            }
+        });
+    }
+}
+initWeek2Day2Events();
+console.groupEnd();
+
