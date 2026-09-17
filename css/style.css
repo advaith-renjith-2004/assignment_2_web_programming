@@ -770,6 +770,48 @@ img {
     border: 1px solid rgba(74, 222, 128, 0.3);
 }
 
+/* Form Error Spans & Validation Feedback (Week 2 - Day 5) */
+.error-msg {
+    color: var(--stock-out-color);
+    font-size: 0.8rem;
+    margin-top: 0.35rem;
+    font-weight: 500;
+    min-height: 1.1rem;
+    display: block;
+}
+
+.enquiry-form input.input-invalid,
+.enquiry-form textarea.input-invalid {
+    border-color: var(--stock-out-color) !important;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.25) !important;
+}
+
+.enquiry-form input.input-valid,
+.enquiry-form textarea.input-valid {
+    border-color: var(--stock-in-color) !important;
+}
+
+.preview-box {
+    background-color: #071511;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.preview-box h4 {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+}
+
+.safe-preview-text {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    word-break: break-all;
+}
+
 /* --- Admin Dashboard Specific Styling --- */
 .admin-header {
     background: linear-gradient(135deg, #101c18 0%, #1c362c 100%);

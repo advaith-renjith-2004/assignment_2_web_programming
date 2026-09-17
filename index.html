@@ -202,22 +202,38 @@
                     <p>Have questions about bulk orders, wholesale pricing, or spice custom blends? Send us a message!</p>
                 </div>
                 
-                <form id="enquiryForm" class="enquiry-form" onsubmit="handleFormSubmit(event)">
+                <form id="enquiryForm" class="enquiry-form" novalidate>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="fullName">Full Name <span class="required">*</span></label>
                             <input type="text" id="fullName" name="fullName" placeholder="e.g. Advaith Renjith" required>
+                            <span class="error-msg" id="nameError"></span>
                         </div>
                         <div class="form-group">
                             <label for="emailAddress">Email Address <span class="required">*</span></label>
                             <input type="email" id="emailAddress" name="emailAddress" placeholder="e.g. user@example.com" required>
+                            <span class="error-msg" id="emailError"></span>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="phoneNum">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phoneNum" name="phoneNum" placeholder="e.g. +91 98765 43210" required>
+                            <label for="custPassword">Password (Min. 8 chars) <span class="required">*</span></label>
+                            <input type="password" id="custPassword" name="custPassword" placeholder="Minimum 8 characters" minlength="8" required>
+                            <span class="error-msg" id="passwordError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-type password" required>
+                            <span class="error-msg" id="confirmPasswordError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNum">Phone Number (10 Digits) <span class="required">*</span></label>
+                            <input type="tel" id="phoneNum" name="phoneNum" placeholder="e.g. 9847012345" pattern="[0-9]{10}" required>
+                            <span class="error-msg" id="phoneError"></span>
                         </div>
                         <div class="form-group">
                             <label for="interestCategory">Spice Interest Category</label>
@@ -236,8 +252,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="messageText">Enquiry Details / Delivery Address <span class="required">*</span></label>
-                        <textarea id="messageText" name="messageText" rows="4" placeholder="Mention specific requirements, quantity, or shipping preferences..." required></textarea>
+                        <label for="messageText">Enquiry Details / Message <span class="required">*</span></label>
+                        <textarea id="messageText" name="messageText" rows="3" placeholder="Type your message here (safe rendering test)..." required></textarea>
+                        <span class="error-msg" id="messageError"></span>
+                    </div>
+
+                    <div class="preview-box">
+                        <h4>Safe Message Preview (textContent):</h4>
+                        <div id="safeMessagePreview" class="safe-preview-text">Type in the message box above to preview safe rendering...</div>
                     </div>
 
                     <div class="form-group checkbox-group">

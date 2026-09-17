@@ -644,5 +644,202 @@ function setupDualFilter() {
 setupDualFilter();
 console.groupEnd();
 
+// ==========================================================================
+// WEEK 2 - DAY 5: FORM VALIDATION & CONSTRAINT API
+// ==========================================================================
+console.group("%c--- Week 2 Day 5: Form Validation ---", "color: #ec4899; font-weight: bold;");
+
+function initWeek2Day5FormValidation() {
+    const form = document.getElementById('enquiryForm');
+    if (!form) return;
+
+    const nameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('emailAddress');
+    const passwordInput = document.getElementById('custPassword');
+    const confirmInput = document.getElementById('confirmPassword');
+    const phoneInput = document.getElementById('phoneNum');
+    const messageInput = document.getElementById('messageText');
+
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmError = document.getElementById('confirmPasswordError');
+    const phoneError = document.getElementById('phoneError');
+    const messageError = document.getElementById('messageError');
+    const safePreview = document.getElementById('safeMessagePreview');
+
+    // Email regex: Standard format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // 10-digit phone regex
+    const phoneRegex = /^\d{10}$/;
+
+    // Task 1 & 2: Field Validators using Constraint Validation API & Regex
+    function validateName() {
+        if (!nameInput) return true;
+        if (nameInput.validity.valueMissing || nameInput.value.trim() === "") {
+            nameError.textContent = "Full name is required.";
+            nameInput.classList.add('input-invalid');
+            nameInput.classList.remove('input-valid');
+            return false;
+        }
+        nameError.textContent = "";
+        nameInput.classList.remove('input-invalid');
+        nameInput.classList.add('input-valid');
+        return true;
+    }
+
+    function validateEmail() {
+        if (!emailInput) return true;
+        const val = emailInput.value.trim();
+        if (emailInput.validity.valueMissing || val === "") {
+            emailError.textContent = "Email address is required.";
+        } else if (!emailRegex.test(val)) {
+            emailError.textContent = "Please enter a valid email format (e.g. user@domain.com).";
+        } else {
+            emailError.textContent = "";
+            emailInput.classList.remove('input-invalid');
+            emailInput.classList.add('input-valid');
+            return true;
+        }
+        emailInput.classList.add('input-invalid');
+        emailInput.classList.remove('input-valid');
+        return false;
+    }
+
+    function validatePassword() {
+        if (!passwordInput) return true;
+        if (passwordInput.validity.valueMissing || passwordInput.value.length === 0) {
+            passwordError.textContent = "Password is required.";
+        } else if (passwordInput.value.length < 8) {
+            passwordError.textContent = `Password must be at least 8 characters (current: ${passwordInput.value.length}).`;
+        } else {
+            passwordError.textContent = "";
+            passwordInput.classList.remove('input-invalid');
+            passwordInput.classList.add('input-valid');
+            validateConfirmPassword();
+            return true;
+        }
+        passwordInput.classList.add('input-invalid');
+        passwordInput.classList.remove('input-valid');
+        return false;
+    }
+
+    function validateConfirmPassword() {
+        if (!confirmInput || !passwordInput) return true;
+        if (confirmInput.value !== passwordInput.value) {
+            // Task 2: Use setCustomValidity() for confirm password field
+            confirmInput.setCustomValidity("Passwords do not match!");
+            confirmError.textContent = "Passwords do not match.";
+            confirmInput.classList.add('input-invalid');
+            confirmInput.classList.remove('input-valid');
+            return false;
+        } else {
+            confirmInput.setCustomValidity(""); // Clear custom validity error
+            confirmError.textContent = "";
+            confirmInput.classList.remove('input-invalid');
+            confirmInput.classList.add('input-valid');
+            return true;
+        }
+    }
+
+    function validatePhone() {
+        if (!phoneInput) return true;
+        const val = phoneInput.value.trim();
+        if (phoneInput.validity.valueMissing || val === "") {
+            phoneError.textContent = "Phone number is required.";
+        } else if (!phoneRegex.test(val)) {
+            phoneError.textContent = "Please enter a valid 10-digit mobile number.";
+        } else {
+            phoneError.textContent = "";
+            phoneInput.classList.remove('input-invalid');
+            phoneInput.classList.add('input-valid');
+            return true;
+        }
+        phoneInput.classList.add('input-invalid');
+        phoneInput.classList.remove('input-valid');
+        return false;
+    }
+
+    function validateMessage() {
+        if (!messageInput) return true;
+        if (messageInput.value.trim() === "") {
+            messageError.textContent = "Message or enquiry details cannot be empty.";
+            messageInput.classList.add('input-invalid');
+            messageInput.classList.remove('input-valid');
+            return false;
+        }
+        messageError.textContent = "";
+        messageInput.classList.remove('input-invalid');
+        messageInput.classList.add('input-valid');
+        return true;
+    }
+
+    // Task 2: Real-time feedback using 'input' event
+    if (nameInput) nameInput.addEventListener('input', validateName);
+    if (emailInput) emailInput.addEventListener('input', validateEmail);
+    if (passwordInput) passwordInput.addEventListener('input', validatePassword);
+    if (confirmInput) confirmInput.addEventListener('input', validateConfirmPassword);
+    if (phoneInput) phoneInput.addEventListener('input', validatePhone);
+    if (messageInput) {
+        messageInput.addEventListener('input', function() {
+            validateMessage();
+            // Task 3: Safe rendering preview using textContent
+            if (safePreview) {
+                safePreview.textContent = messageInput.value; // Safe rendering via textContent
+            }
+        });
+    }
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isPassValid = validatePassword();
+        const isConfirmValid = validateConfirmPassword();
+        const isPhoneValid = validatePhone();
+        const isMsgValid = validateMessage();
+
+        const isFormValid = isNameValid && isEmailValid && isPassValid && isConfirmValid && isPhoneValid && isMsgValid;
+
+        const feedback = document.getElementById('formFeedback');
+        if (isFormValid) {
+            feedback.className = 'form-feedback success';
+            feedback.innerHTML = `<strong>Success!</strong> All fields validated successfully via Constraint Validation API. Thank you, ${nameInput.value}!`;
+            console.log("Form successfully validated and submitted.");
+        } else {
+            feedback.className = 'form-feedback';
+            feedback.style.display = 'block';
+            feedback.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+            feedback.style.color = '#f87171';
+            feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+            feedback.textContent = "Please resolve the highlighted validation errors above.";
+            console.warn("Form validation failed on submit.");
+        }
+    });
+
+    /*
+    -----------------------------------------------------------------------------
+    WEEK 2 DAY 5 TASK 3: XSS VS SAFE RENDERING DEMONSTRATION
+    -----------------------------------------------------------------------------
+    EXPERIMENT OBSERVATION:
+    When user enters: <script>alert('XSS Attack!')</script> or <img src=x onerror=alert('XSS')>
+    - If rendered using innerHTML:
+      element.innerHTML = userInput;
+      The browser parses the input as HTML markup. An <img> onerror or executable payload
+      triggers and runs arbitrary JavaScript in the user's session (Cross-Site Scripting).
+    - When rendered using textContent:
+      element.textContent = userInput;
+      The browser treats the entire string literally as character data (TextNode). Special
+      characters such as '<', '>', and '&' are not parsed as HTML tags, rendering
+      '<script>alert("XSS")</script>' harmlessly on the screen as plain text.
+    -----------------------------------------------------------------------------
+    */
+    console.log("Week 2 Day 5 Form Validation with Constraint API initialized.");
+}
+initWeek2Day5FormValidation();
+console.groupEnd();
+
+
 
 
