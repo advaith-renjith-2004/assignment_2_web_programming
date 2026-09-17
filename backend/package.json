@@ -1,0 +1,22 @@
+{
+  "name": "el-herbs-backend",
+  "version": "1.0.0",
+  "description": "Express REST API backend for EL Herbs and Spices Shop",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "spices",
+    "api",
+    "web-programming"
+  ],
+  "author": "Advaith Renjith",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}
