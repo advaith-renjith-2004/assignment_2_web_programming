@@ -1,17 +1,53 @@
 /* ==============================================================================
-   EL Herbs and Spices Shop - Backend Express Server (server.js)
+   EL Herbs and Spices Shop - Express REST API & Middleware (server.js)
    Course: 23EEL43H Web Programming | Assignment # 2.c
-   Week 3 - Day 4 & Day 5 Deliverables
+   Week 3 - Day 4 & Day 5 Deliverables (Full REST API with Middleware Pipeline)
    ============================================================================== */
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware for parsing JSON request bodies (Day 4 Task 1)
+// ==============================================================================
+// WEEK 3 - DAY 5 TASK 1: MIDDLEWARE PIPELINE (IN STRICT CORRECT ORDER)
+// ==============================================================================
+
+// 1. Custom Logger Middleware: prints HTTP method, URL, and timestamp (must call next())
+app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${req.method} ${req.originalUrl}`);
+    next(); // Essential: passes execution to the next middleware in pipeline
+});
+
+// 2. Request Body Parser Middleware
 app.use(express.json());
 
-// In-Memory Products Database (Day 4 Task 1)
+// 3. CORS Middleware: Restricting access to authorized frontend origins (Day 5 Task 1)
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'http://127.0.0.1:5500',
+    'https://advaith-renjith-2004.github.io'
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl, Postman) or approved origins
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error(`Access blocked by CORS policy: Origin ${origin} not allowed.`));
+        }
+    },
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
+
+// ==============================================================================
+// IN-MEMORY DATA STORES
+// ==============================================================================
+
 let products = [
     { id: 1, name: "Cardamom (Elaichi)", price: 450, stock: 25, category: "Whole Spices" },
     { id: 2, name: "Turmeric Powder (Haldi)", price: 180, stock: 50, category: "Ground Spices" },
@@ -23,21 +59,27 @@ let products = [
     { id: 8, name: "Nutmeg (Jaiphal)", price: 420, stock: 12, category: "Whole Spices" }
 ];
 
+// Tasks Array for Admin Task Management (Day 5 Task 2)
+let tasks = [
+    { id: 1, text: "Restock Ceylon Cinnamon 200g pouches", completed: false, createdAt: new Date().toISOString() },
+    { id: 2, text: "Grind 25kg sun-dried Turmeric roots", completed: false, createdAt: new Date().toISOString() }
+];
+
 // ==============================================================================
-// WEEK 3 - DAY 4 ROUTES
+// 4. API ENDPOINTS & ROUTES
 // ==============================================================================
 
-// Route 1: Health Check GET /api/health (Day 4 Task 1)
+// GET /api/health - Server health monitor
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: "OK",
-        message: "EL Herbs & Spices API Server is running smoothly.",
+        service: "EL Herbs & Spices Backend Service",
         uptime: process.uptime(),
         timestamp: new Date().toISOString()
     });
 });
 
-// Route 2: Products Catalog GET /api/products (Day 4 Task 1)
+// GET /api/products - Product catalog listing (Day 4 Task 1)
 app.get('/api/products', (req, res) => {
     res.status(200).json({
         success: true,
@@ -46,14 +88,14 @@ app.get('/api/products', (req, res) => {
     });
 });
 
-// Route 3: Add New Product POST /api/products (Day 4 Task 2)
+// POST /api/products - Create new spice item (Day 4 Task 2)
 app.post('/api/products', (req, res) => {
     const { name, price, stock, category } = req.body;
 
     if (!name || price === undefined || stock === undefined || !category) {
         return res.status(400).json({
             success: false,
-            error: "Missing required product fields (name, price, stock, category)."
+            error: "All fields are required: name, price, stock, category."
         });
     }
 
@@ -66,42 +108,133 @@ app.post('/api/products', (req, res) => {
     };
 
     products.push(newProduct);
-    console.log(`[POST /api/products] Created new product #${newProduct.id}: ${newProduct.name}`);
-
-    // Return status 201 Created with new product JSON (Day 4 Task 2)
     return res.status(201).json({
         success: true,
-        message: "Product successfully created in inventory.",
+        message: "Product created successfully",
         data: newProduct
     });
 });
 
+// ------------------------------------------------------------------------------
+// WEEK 3 - DAY 5 TASK 2: /api/tasks ROUTES
+// ------------------------------------------------------------------------------
+
+// 1. GET /api/tasks: Returns full task list with status 200
+app.get('/api/tasks', (req, res) => {
+    res.status(200).json({
+        success: true,
+        count: tasks.length,
+        data: tasks
+    });
+});
+
+// 2. POST /api/tasks: Validates input, returns 400 for empty text or 201 for valid task
+app.post('/api/tasks', (req, res) => {
+    const { text } = req.body;
+
+    // Input Validation: check if text is empty or non-existent
+    if (!text || typeof text !== 'string' || text.trim() === '') {
+        return res.status(400).json({
+            success: false,
+            error: "Task text cannot be empty or blank."
+        });
+    }
+
+    const newTask = {
+        id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+        text: text.trim(),
+        completed: false,
+        createdAt: new Date().toISOString()
+    };
+
+    tasks.push(newTask);
+    console.log(`[POST /api/tasks] Created task #${newTask.id}: "${newTask.text}"`);
+
+    return res.status(201).json({
+        success: true,
+        message: "Task added successfully",
+        data: newTask
+    });
+});
+
+// 3. DELETE /api/tasks/:id: Returns 404 for wrong id, or 204 No Content after deleting
+app.delete('/api/tasks/:id', (req, res) => {
+    const taskId = parseInt(req.params.id, 10);
+    const taskIndex = tasks.findIndex(t => t.id === taskId);
+
+    if (taskIndex === -1) {
+        return res.status(404).json({
+            success: false,
+            error: `Task with id #${taskId} was not found.`
+        });
+    }
+
+    const deleted = tasks.splice(taskIndex, 1)[0];
+    console.log(`[DELETE /api/tasks/:id] Removed task #${taskId}: "${deleted.text}"`);
+
+    // Status 204: No Content indicates successful deletion
+    return res.status(204).send();
+});
+
+// ==============================================================================
+// 5. 404 NOT FOUND MIDDLEWARE (Day 5 Task 1)
+// ==============================================================================
+app.use((req, res, next) => {
+    res.status(404).json({
+        success: false,
+        error: "Route not found",
+        requestedUrl: req.originalUrl
+    });
+});
+
+// ==============================================================================
+// 6. CENTRAL ERROR HANDLER MIDDLEWARE (Must take 4 parameters: err, req, res, next)
+// ==============================================================================
+app.use((err, req, res, next) => {
+    console.error("[Internal Server Error Caught]:", err.stack || err.message);
+    const statusCode = err.status || 500;
+    res.status(statusCode).json({
+        success: false,
+        error: err.message || "Internal Server Error",
+        statusCode: statusCode
+    });
+});
+
+// ==============================================================================
+// WEEK 3 - DAY 5 TASK 3: BUGGY SERVER PROGRAM ANALYSIS & CORRECTIONS
+// ==============================================================================
 /*
---------------------------------------------------------------------------------
-WEEK 3 DAY 4 TASK 3: CORS ERROR OBSERVATION & DOCUMENTATION
---------------------------------------------------------------------------------
-When the frontend page (served on http://localhost:8080 or file://) attempts to fetch
-from http://localhost:5000/api/products WITHOUT CORS middleware installed:
+---------------------------------------------------------------------------------
+SERVER PROGRAM ERRORS AND DOCUMENTED FIXES (Task 3):
+---------------------------------------------------------------------------------
+1. Bug 1: Logger does not call next()
+   - Problem: Without calling next(), the request hangs indefinitely and never 
+     reaches subsequent route handlers.
+   - Fix: Added next(); at the end of logger middleware function.
 
-OBSERVED BROWSER CONSOLE CORS ERROR:
-"Access to fetch at 'http://localhost:5000/api/products' from origin 'http://localhost:8080' 
-has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present 
-on the requested resource. If an opaque response serves your needs, set the request's 
-mode to 'no-cors' to fetch the resource with CORS disabled."
+2. Bug 2: CORS allows every website without restriction
+   - Problem: Using app.use(cors()) or wildcard '*' permits any malicious 
+     external website to make authenticated requests from user browsers.
+   - Fix: Configured CORS with allowedOrigins whitelist array.
 
-REASON:
-The Same-Origin Policy (SOP) enforced by modern web browsers blocks cross-origin 
-requests unless the server explicitly includes 'Access-Control-Allow-Origin' in 
-its HTTP response headers. This is resolved by installing the 'cors' package on Day 5.
---------------------------------------------------------------------------------
+3. Bug 3: No input validation performed on task creation
+   - Problem: Accepting req.body without validation allows blank, undefined, or 
+     malformed objects to corrupt the backend database.
+   - Fix: Added explicit check `if (!text || text.trim() === '') return res.status(400)`.
+
+4. Bug 4: Error handler written with three parameters instead of four
+   - Problem: Express detects error-handling middleware specifically by checking
+     the arity (function.length === 4). Writing (req, res, next) causes Express 
+     to treat it as a standard middleware, failing to catch errors passed to next(err).
+   - Fix: Explicitly defined error handler signature with four parameters:
+     `(err, req, res, next)`.
+---------------------------------------------------------------------------------
 */
 
-// Start Server Listener
+// Start Server
 if (require.main === module) {
     app.listen(PORT, () => {
-        console.log(`🌿 EL Herbs & Spices API Server listening on http://localhost:${PORT}`);
-        console.log(`   - Health check: http://localhost:${PORT}/api/health`);
-        console.log(`   - Product catalog: http://localhost:${PORT}/api/products`);
+        console.log(`🌿 EL Herbs & Spices REST API Server running on port ${PORT}`);
     });
 }
 
