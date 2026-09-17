@@ -552,4 +552,97 @@ function initWeek2Day3TaskManager() {
 initWeek2Day3TaskManager();
 console.groupEnd();
 
+// ==========================================================================
+// WEEK 2 - DAY 4: ARRAYS AND OBJECTS
+// ==========================================================================
+console.group("%c--- Week 2 Day 4: Arrays and Objects ---", "color: #10b981; font-weight: bold;");
+
+// Task 1: Student score array with name, roll, mark; map(), filter(), reduce()
+const students = [
+    { name: "Advaith Renjith", roll: 101, mark: 94 },
+    { name: "Devika Nair", roll: 102, mark: 88 },
+    { name: "Rahul Krishna", roll: 103, mark: 76 },
+    { name: "Ananya Pillai", roll: 104, mark: 92 },
+    { name: "Siddharth Menon", roll: 105, mark: 38 },
+    { name: "Meera Varma", roll: 106, mark: 85 }
+];
+
+// 1. map() to get list of names
+const studentNames = students.map(s => s.name);
+console.log("Student Names (map):", studentNames);
+
+// 2. filter() to get students who passed (pass mark >= 40)
+const passedStudents = students.filter(s => s.mark >= 40);
+console.log("Passed Students (filter mark >= 40):", passedStudents);
+
+// 3. reduce() to find total and average marks
+const totalMarks = students.reduce((acc, s) => acc + s.mark, 0);
+const averageMark = totalMarks / students.length;
+console.log(`Total Marks (reduce): ${totalMarks} | Average Mark: ${averageMark.toFixed(2)}`);
+
+// Task 2: find(), some(), every(), Object.keys(), Object.entries()
+// 1. find() to get topper
+const highestMark = Math.max(...students.map(s => s.mark));
+const topper = students.find(s => s.mark === highestMark);
+console.log("Class Topper (find):", topper);
+
+// 2. some() to check if anyone scored >= 90
+const hasDistinction = students.some(s => s.mark >= 90);
+console.log("Has any student scored 90+? (some):", hasDistinction);
+
+// 3. every() to check if all students passed
+const allPassed = students.every(s => s.mark >= 40);
+console.log("Did every student pass? (every):", allPassed);
+
+// 4. Object.keys() and Object.entries() on one student record
+console.log("Keys of Topper (Object.keys):", Object.keys(topper));
+console.log("Entries of Topper (Object.entries):");
+Object.entries(topper).forEach(([key, value]) => {
+    console.log(`  ${key}: ${value}`);
+});
+
+// Repeat map(), filter(), reduce() on products array
+// a. map() to get product names
+const productNames = products.map(p => p.name);
+console.log("Product Names (map):", productNames);
+
+// b. filter() to get products currently in stock
+const inStockProducts = products.filter(p => p.stock > 0);
+console.log("Products in Stock (filter stock > 0):", inStockProducts);
+
+// c. reduce() to find total stock inventory value (price * stock)
+const totalStockValue = products.reduce((acc, p) => acc + (p.price * p.stock), 0);
+console.log(`Total Stock Inventory Value (reduce): ₹${totalStockValue.toLocaleString()}`);
+
+// Task 3: Dual real-time filtering: search input event + category dropdown
+function setupDualFilter() {
+    const searchBox = document.getElementById('spiceSearch');
+    const categorySelect = document.getElementById('categoryFilter');
+
+    function applyFilters() {
+        const searchTerm = searchBox ? searchBox.value.trim().toLowerCase() : "";
+        const selectedCat = categorySelect ? categorySelect.value : "All";
+
+        const filtered = products.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+            const matchesCategory = (selectedCat === "All" || product.category === selectedCat);
+            return matchesSearch && matchesCategory;
+        });
+
+        renderProducts(filtered);
+        console.log(`Dual Filter applied -> Query: "${searchTerm}", Category: "${selectedCat}", Matches: ${filtered.length}`);
+    }
+
+    if (searchBox) {
+        // Use input event as user types (Task 3 requirement)
+        searchBox.addEventListener('input', applyFilters);
+    }
+    if (categorySelect) {
+        categorySelect.addEventListener('change', applyFilters);
+    }
+}
+setupDualFilter();
+console.groupEnd();
+
+
 

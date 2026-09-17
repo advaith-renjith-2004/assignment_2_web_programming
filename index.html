@@ -66,7 +66,13 @@
                 <h2>Our Featured Spices</h2>
                 <p class="section-desc">Hand-selected premium organic spices direct from local farmers</p>
                 <div class="search-bar-wrap">
-                    <input type="text" id="spiceSearch" class="search-input" placeholder="🔍 Search spices (Press Enter to search, Esc to clear)...">
+                    <input type="text" id="spiceSearch" class="search-input" placeholder="🔍 Search spices (e.g., Cardamom, Pepper)...">
+                    <select id="categoryFilter" class="category-select">
+                        <option value="All">All Categories</option>
+                        <option value="Whole Spices">Whole Spices</option>
+                        <option value="Ground Spices">Ground Spices</option>
+                        <option value="Herbs">Herbs</option>
+                    </select>
                 </div>
                 <div class="filter-controls">
                     <button class="filter-btn active" onclick="filterCategory('All')">All Spices</button>
