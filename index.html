@@ -18,9 +18,9 @@
     <header class="site-header">
         <div class="header-container">
             <div class="brand">
-                <img src="images/logo.jpg" alt="EL Herbs & Spices Logo" class="shop-logo">
+                <img src="images/logo.jpg" alt="EL Herbs & Spices Logo" class="shop-logo" id="mainShopLogo">
                 <div class="brand-text">
-                    <h1 class="shop-title">EL Herbs & Spices</h1>
+                    <h1 class="shop-title" id="mainHeading">EL Herbs & Spices</h1>
                     <p class="shop-tagline">Pure Organic Aromas • Authentic Quality • Farm Fresh</p>
                 </div>
             </div>
@@ -73,161 +73,8 @@
                 </div>
             </div>
 
-            <!-- Product Cards Area (Arranged with CSS Grid & Box Model) -->
-            <div class="product-grid" id="product-grid-container">
-                <!-- Static Fallback / Day 1 HTML Product Cards -->
-                <article class="product-card" data-category="Whole Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/cardamom.jpg" alt="Green Cardamom Pods">
-                        <span class="badge stock-in">In Stock (25 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Whole Spices</span>
-                        <h3 class="product-name">Cardamom (Elaichi)</h3>
-                        <p class="product-desc">Premium organic green cardamom pods from the hills of Western Ghats with rich aroma.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 250g</span>
-                                <span class="price-value">₹450</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Cardamom')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Ground Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/turmeric.jpg" alt="Turmeric Powder">
-                        <span class="badge stock-in">In Stock (50 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Ground Spices</span>
-                        <h3 class="product-name">Turmeric Powder (Haldi)</h3>
-                        <p class="product-desc">High-curcumin golden turmeric powder, 100% pure, unadulterated and sun-dried.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 500g</span>
-                                <span class="price-value">₹180</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Turmeric Powder')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Whole Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/black_pepper.jpg" alt="Black Pepper">
-                        <span class="badge stock-in">In Stock (40 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Whole Spices</span>
-                        <h3 class="product-name">Black Pepper (Kali Mirch)</h3>
-                        <p class="product-desc">Bold Tellicherry black peppercorns known for pungent heat and rich aroma.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 250g</span>
-                                <span class="price-value">₹320</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Black Pepper')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Whole Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/cinnamon.jpg" alt="Cinnamon Sticks">
-                        <span class="badge stock-low">Low Stock (15 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Whole Spices</span>
-                        <h3 class="product-name">Cinnamon Sticks (Dalchini)</h3>
-                        <p class="product-desc">Sweet Ceylon cinnamon rolls, perfect for baking, teas, and savory curries.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 200g</span>
-                                <span class="price-value">₹280</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Cinnamon Sticks')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Whole Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/clove.jpg" alt="Cloves">
-                        <span class="badge stock-low">Low Stock (8 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Whole Spices</span>
-                        <h3 class="product-name">Clove (Laung)</h3>
-                        <p class="product-desc">Handpicked whole aromatic cloves packed with essential oils and intense flavor.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 100g</span>
-                                <span class="price-value">₹550</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Clove')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Ground Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/ginger_powder.jpg" alt="Ginger Powder">
-                        <span class="badge stock-in">In Stock (30 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Ground Spices</span>
-                        <h3 class="product-name">Ginger Powder (Saunth)</h3>
-                        <p class="product-desc">Finely ground dry ginger powder ideal for herbal teas, baking, and cooking.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 250g</span>
-                                <span class="price-value">₹150</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Ginger Powder')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Herbs">
-                    <div class="card-image-wrapper">
-                        <img src="images/bay_leaf.jpg" alt="Bay Leaf">
-                        <span class="badge stock-out">Out of Stock</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Herbs</span>
-                        <h3 class="product-name">Bay Leaf (Tej Patta)</h3>
-                        <p class="product-desc">Sun-dried natural bay leaves imparting rich herbal aroma to soups and biryanis.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 100g</span>
-                                <span class="price-value">₹90</span>
-                            </div>
-                            <button class="btn-cart disabled" disabled>Out of Stock</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" data-category="Whole Spices">
-                    <div class="card-image-wrapper">
-                        <img src="images/nutmeg.jpg" alt="Nutmeg">
-                        <span class="badge stock-low">Low Stock (12 kg)</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="category-tag">Whole Spices</span>
-                        <h3 class="product-name">Nutmeg (Jaiphal)</h3>
-                        <p class="product-desc">Whole aromatic nutmeg seeds providing warm, nutty flavor for sweet & savory dishes.</p>
-                        <div class="card-footer">
-                            <div class="price-container">
-                                <span class="price-label">Price / 150g</span>
-                                <span class="price-value">₹420</span>
-                            </div>
-                            <button class="btn-cart" onclick="addToCart('Nutmeg')">Add to Cart</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
+            <!-- Empty Product Cards Area dynamically rendered by renderProducts() -->
+            <div class="product-grid" id="productGrid"></div>
         </section>
 
         <!-- Price List Table Section -->

@@ -168,3 +168,182 @@ function handleFormSubmit(event) {
         document.getElementById('enquiryForm').reset();
     }
 }
+
+// ==========================================================================
+// WEEK 2 - DAY 1: DOM MANIPULATION
+// ==========================================================================
+
+console.group("%c--- Week 2 Day 1: DOM Manipulation ---", "color: #38bdf8; font-weight: bold;");
+
+// Task 1: Select heading by id, change text with textContent, change image with setAttribute, toggle class
+function updatePageBranding() {
+    const heading = document.querySelector('#mainHeading');
+    if (heading) {
+        heading.textContent = "EL Herbs & Spices Shop";
+        heading.classList.toggle('shop-title-accent');
+        console.log("Updated heading textContent and toggled class:", heading.textContent);
+    }
+    const logoImg = document.querySelector('#mainShopLogo');
+    if (logoImg) {
+        logoImg.setAttribute('alt', 'EL Herbs & Spices Signature Brand Logo');
+        logoImg.classList.toggle('logo-active');
+        console.log("Updated logo image attribute alt:", logoImg.getAttribute('alt'));
+    }
+}
+updatePageBranding();
+
+// Task 2: renderProducts(list) using createElement, textContent, .out-of-stock class
+function renderProducts(list) {
+    const productGrid = document.getElementById('productGrid');
+    if (!productGrid) return;
+    productGrid.innerHTML = ''; // Clear existing contents
+
+    const imageMap = {
+        1: "cardamom.jpg",
+        2: "turmeric.jpg",
+        3: "black_pepper.jpg",
+        4: "cinnamon.jpg",
+        5: "clove.jpg",
+        6: "ginger_powder.jpg",
+        7: "bay_leaf.jpg",
+        8: "nutmeg.jpg"
+    };
+
+    list.forEach(product => {
+        // Create product card element
+        const card = document.createElement('article');
+        card.classList.add('product-card');
+        card.setAttribute('data-category', product.category);
+
+        // Add class out-of-stock when stock is 0 (Task 2 Requirement)
+        if (product.stock === 0) {
+            card.classList.add('out-of-stock');
+        }
+
+        // Image wrapper
+        const imgWrap = document.createElement('div');
+        imgWrap.classList.add('card-image-wrapper');
+
+        const img = document.createElement('img');
+        img.setAttribute('src', `images/${imageMap[product.id] || 'logo.jpg'}`);
+        img.setAttribute('alt', product.name);
+
+        const badge = document.createElement('span');
+        badge.classList.add('badge');
+        if (product.stock === 0) {
+            badge.classList.add('stock-out');
+            badge.textContent = 'Out of Stock';
+        } else if (product.stock < 15) {
+            badge.classList.add('stock-low');
+            badge.textContent = `Low Stock (${product.stock} kg)`;
+        } else {
+            badge.classList.add('stock-in');
+            badge.textContent = `In Stock (${product.stock} kg)`;
+        }
+
+        imgWrap.appendChild(img);
+        imgWrap.appendChild(badge);
+
+        // Card Body
+        const body = document.createElement('div');
+        body.classList.add('card-body');
+
+        const cat = document.createElement('span');
+        cat.classList.add('category-tag');
+        cat.textContent = product.category;
+
+        const title = document.createElement('h3');
+        title.classList.add('product-name');
+        title.textContent = product.name;
+
+        const desc = document.createElement('p');
+        desc.classList.add('product-desc');
+        desc.textContent = `Fresh organic ${product.name} sourced from sustainable Kerala farms.`;
+
+        // Card Footer
+        const footer = document.createElement('div');
+        footer.classList.add('card-footer');
+
+        const priceBox = document.createElement('div');
+        priceBox.classList.add('price-container');
+
+        const priceLbl = document.createElement('span');
+        priceLbl.classList.add('price-label');
+        priceLbl.textContent = 'Unit Price';
+
+        const priceVal = document.createElement('span');
+        priceVal.classList.add('price-value');
+        priceVal.textContent = `₹${product.price}`;
+
+        priceBox.appendChild(priceLbl);
+        priceBox.appendChild(priceVal);
+
+        const btn = document.createElement('button');
+        btn.classList.add('btn-cart');
+        if (product.stock === 0) {
+            btn.classList.add('disabled');
+            btn.setAttribute('disabled', 'true');
+            btn.textContent = 'Out of Stock';
+        } else {
+            btn.textContent = 'Add to Cart';
+            btn.setAttribute('data-id', product.id);
+            btn.setAttribute('data-name', product.name);
+        }
+
+        footer.appendChild(priceBox);
+        footer.appendChild(btn);
+
+        body.appendChild(cat);
+        body.appendChild(title);
+        body.appendChild(desc);
+        body.appendChild(footer);
+
+        card.appendChild(imgWrap);
+        card.appendChild(body);
+
+        productGrid.appendChild(card);
+    });
+    console.log(`Rendered ${list.length} products to #productGrid via renderProducts()`);
+}
+
+// Initial render using the products array
+renderProducts(products);
+
+// Task 3: Debug and correct given program + textContent vs innerHTML explanation
+/*
+BUGGY PROGRAM ANALYSIS & CORRECTIONS:
+1. Error: const heading = document.querySelector("mainHeading");
+   Correction: Query selector requires '#' symbol for ID selection: document.querySelector("#mainHeading").
+2. Error: const grid = document.getElementsByClassName("productGrid");
+   Correction: 'productGrid' is an ID, not a class name. Use document.getElementById("productGrid") or document.querySelector("#productGrid").
+3. Error: const cards = document.querySelectorAll(".product-card"); cards.style.color = "red";
+   Correction: querySelectorAll returns a NodeList collection, which has no direct .style property. Must iterate using .forEach().
+*/
+const correctedHeading = document.querySelector("#mainHeading");
+const correctedGrid = document.getElementById("productGrid");
+const correctedCards = document.querySelectorAll(".product-card");
+correctedCards.forEach(card => {
+    card.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+});
+console.log("Task 3 Bug Corrections executed successfully.");
+
+/*
+-----------------------------------------------------------------------------
+EXPLANATION: textContent vs innerHTML
+-----------------------------------------------------------------------------
+1. textContent:
+   - Reads or writes pure unformatted text within an element and all child nodes.
+   - Encodes any HTML special characters (<, >, &, etc.) as plain text.
+   - Prevents XSS (Cross-Site Scripting) because strings containing <script> or
+     malicious HTML tags are treated safely as inert text.
+   - Faster execution because the browser does not invoke its HTML parser.
+
+2. innerHTML:
+   - Reads or writes serialized HTML markup.
+   - Any HTML markup string is parsed into DOM nodes and rendered directly.
+   - Vulnerable to security risks (XSS) if untrusted user input is directly 
+     assigned without proper sanitization.
+-----------------------------------------------------------------------------
+*/
+console.groupEnd();
+

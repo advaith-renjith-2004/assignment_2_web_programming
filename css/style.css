@@ -485,6 +485,26 @@ img {
     cursor: not-allowed;
 }
 
+/* Out of Stock Styling (Week 2 Day 1 Task 2) */
+.product-card.out-of-stock {
+    opacity: 0.7;
+    filter: grayscale(35%);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.product-card.out-of-stock:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Card Zoom Class on Hover (Week 2 Day 2 Task 1) */
+.product-card.zoom {
+    transform: scale(1.04) translateY(-6px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+    border-color: var(--accent-gold);
+    z-index: 10;
+}
+
 /* --- Price List Table Section --- */
 .pricelist-section {
     margin-top: 5rem;
