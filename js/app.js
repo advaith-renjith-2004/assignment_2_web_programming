@@ -938,6 +938,152 @@ function demo404Fetch() {
 demo404Fetch();
 console.groupEnd();
 
+// ==========================================================================
+// WEEK 3 - DAY 2: ASYNC / AWAIT, ERROR HANDLING AND DEBUGGING
+// ==========================================================================
+console.group("%c--- Week 3 Day 2: Async/Await & Error Handling ---", "color: #3b82f6; font-weight: bold;");
+
+// Task 1: Rewrite loadProducts() using async and await with try, catch, finally
+// Showing "Loading..." message before request and removing it in finally block
+async function loadProductsAsync() {
+    const loadingEl = document.getElementById('productLoadingMsg');
+    const productGrid = document.getElementById('productGrid');
+
+    try {
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+            loadingEl.innerHTML = '<span class="spinner"></span> Loading spice catalog...';
+        }
+        console.log("[async/await] Fetching data/products.json...");
+
+        const response = await fetch('data/products.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch catalog: HTTP ${response.status} (${response.statusText})`);
+        }
+
+        const data = await response.json();
+        console.log("[async/await] Successfully fetched and parsed products:", data);
+        renderProducts(data);
+        return data;
+    } catch (error) {
+        console.error("[async/await Catch Block] Caught error loading products:", error.message);
+        if (productGrid) {
+            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">⚠️ Unable to load spice catalog: ${error.message}</div>`;
+        }
+    } finally {
+        if (loadingEl) {
+            loadingEl.style.display = 'none'; // Always remove loading message in finally block
+        }
+        console.log("[async/await Finally Block] Request completed; loading indicator removed.");
+    }
+}
+loadProductsAsync();
+
+// Task 2: Build a product search that shows loading message, displays matches,
+// shows "No matches found" when empty, shows error message in catch, enables search button in finally
+async function performProductSearch() {
+    const searchBtn = document.getElementById('searchBtn');
+    const searchBox = document.getElementById('spiceSearch');
+    const loadingEl = document.getElementById('productLoadingMsg');
+    const productGrid = document.getElementById('productGrid');
+
+    const query = searchBox ? searchBox.value.trim().toLowerCase() : "";
+
+    try {
+        // Disable search button and show loading state
+        if (searchBtn) searchBtn.disabled = true;
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+            loadingEl.innerHTML = `<span class="spinner"></span> Searching for "${query}"...`;
+        }
+
+        console.log(`[Search] Querying products matching: "${query}"`);
+
+        // Fetch latest catalog
+        const res = await fetch('data/products.json');
+        if (!res.ok) {
+            throw new Error(`Search request failed with HTTP ${res.status}`);
+        }
+        const allProducts = await res.json();
+
+        // Filter products matching query
+        const matches = allProducts.filter(item => 
+            item.name.toLowerCase().includes(query) || 
+            item.category.toLowerCase().includes(query)
+        );
+
+        if (matches.length === 0) {
+            if (productGrid) {
+                productGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <h3>🔍 No matches found</h3>
+                    <p>No spices matching "<strong>${query}</strong>" were found in the catalog.</p>
+                </div>`;
+            }
+            console.log(`[Search] No matches found for "${query}".`);
+        } else {
+            renderProducts(matches);
+            console.log(`[Search] Found ${matches.length} matching products.`);
+        }
+    } catch (err) {
+        console.error("[Search Catch Block] Caught error during search:", err.message);
+        if (productGrid) {
+            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">Search failed: ${err.message}</div>`;
+        }
+    } finally {
+        // Re-enable search button and remove loading state in finally block
+        if (searchBtn) searchBtn.disabled = false;
+        if (loadingEl) loadingEl.style.display = 'none';
+        console.log("[Search Finally Block] Re-enabled search button and cleaned up spinner.");
+    }
+}
+
+const searchBtnEl = document.getElementById('searchBtn');
+if (searchBtnEl) {
+    searchBtnEl.addEventListener('click', performProductSearch);
+}
+
+// Task 3: Trigger and catch TypeError and ReferenceError + Browser DevTools Debugging Notes
+function triggerAndCatchRuntimeErrors() {
+    // 1. Cause and catch TypeError
+    try {
+        const nullObj = null;
+        nullObj.nonExistentMethod(); // Causes TypeError: Cannot read properties of null
+    } catch (typeErr) {
+        console.log("Caught Expected TypeError:");
+        console.log(`  Name: ${typeErr.name}`);
+        console.log(`  Message: ${typeErr.message}`);
+    }
+
+    // 2. Cause and catch ReferenceError
+    try {
+        console.log(undefinedSpiceVariable); // Causes ReferenceError: undefinedSpiceVariable is not defined
+    } catch (refErr) {
+        console.log("Caught Expected ReferenceError:");
+        console.log(`  Name: ${refErr.name}`);
+        console.log(`  Message: ${refErr.message}`);
+    }
+}
+triggerAndCatchRuntimeErrors();
+
+/*
+-----------------------------------------------------------------------------
+BROWSER DEVTOOLS DEBUGGING NOTES (Task 3):
+1. Console Panel Debugging:
+   - Used to inspect runtime errors, uncaught exceptions, and console.table() data.
+   - Example: Identifying type coercion discrepancies ('10' + 5 vs '10' - 5) or
+     undefined property accesses in product objects.
+2. Network Tab Debugging:
+   - Used to inspect HTTP requests, headers, response codes (200 OK vs 404 Not Found),
+     payload sizes, and waterfall latency for data/products.json.
+3. Sources Panel Breakpoints:
+   - Placed line breakpoints inside renderProducts() and performProductSearch()
+     to step through execution (Step Over, Step Into, Watch variables, Scope Inspector)
+     and evaluate current values of matches and product card DOM nodes in real time.
+-----------------------------------------------------------------------------
+*/
+console.groupEnd();
+
+
 
 
 
