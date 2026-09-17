@@ -826,6 +826,86 @@ img {
     background: var(--primary-green-light);
 }
 
+/* Shop Task Manager Styles (Week 2 - Day 3) */
+.task-manager-container {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.task-counter-row {
+    margin-bottom: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-input-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.task-input-field {
+    flex: 1;
+    padding: 0.85rem 1.25rem;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-body);
+}
+
+.task-input-field:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+.task-list-ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.task-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.task-item:hover {
+    border-color: var(--border-color);
+    background-color: var(--bg-card-hover);
+}
+
+.task-text {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.task-delete-btn {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--stock-out-color);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.task-delete-btn:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
 .console-box {
     background-color: #050b09;
     border: 1px solid var(--border-color);

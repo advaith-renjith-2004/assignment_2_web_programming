@@ -448,6 +448,108 @@ function initWeek2Day2Events() {
         });
     }
 }
-initWeek2Day2Events();
 console.groupEnd();
+
+// ==========================================================================
+// WEEK 2 - DAY 3: DYNAMIC LIST WITH EVENT DELEGATION
+// ==========================================================================
+console.group("%c--- Week 2 Day 3: Dynamic List with Event Delegation ---", "color: #f59e0b; font-weight: bold;");
+
+function initWeek2Day3TaskManager() {
+    const taskInput = document.getElementById('taskInput');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const taskList = document.getElementById('taskList');
+    const taskCounter = document.getElementById('taskCounter');
+
+    let taskCount = 0;
+
+    function updateCounterDisplay() {
+        if (taskCounter) {
+            taskCounter.textContent = taskCount;
+        }
+    }
+
+    // Task 1: Add a shop task using createElement & textContent, ignoring empty input
+    if (addTaskBtn && taskInput && taskList) {
+        addTaskBtn.addEventListener('click', function() {
+            const taskText = taskInput.value.trim();
+            if (taskText === "") {
+                console.warn("Ignored empty task input.");
+                return;
+            }
+
+            // Create <li> task item
+            const li = document.createElement('li');
+            li.classList.add('task-item');
+
+            // Text span
+            const span = document.createElement('span');
+            span.classList.add('task-text');
+            span.textContent = taskText;
+
+            // Task 2: Add Delete button to each task
+            const deleteBtn = document.createElement('button');
+            deleteBtn.classList.add('task-delete-btn');
+            deleteBtn.textContent = 'Delete';
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+            taskList.appendChild(li);
+
+            // Update counter after add (numeric addition)
+            taskCount++;
+            updateCounterDisplay();
+            console.log(`Task added: "${taskText}". Active count: ${taskCount}`);
+
+            taskInput.value = '';
+            taskInput.focus();
+        });
+
+        // Allow pressing Enter in task input
+        taskInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                addTaskBtn.click();
+            }
+        });
+
+        // Task 2: Delete task using a SINGLE event listener on parent list (EVENT DELEGATION)
+        taskList.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('task-delete-btn')) {
+                const li = e.target.closest('li');
+                if (li) {
+                    const deletedText = li.querySelector('.task-text') ? li.querySelector('.task-text').textContent : 'task';
+                    li.remove();
+
+                    // Update counter after delete
+                    taskCount = Math.max(0, taskCount - 1);
+                    updateCounterDisplay();
+                    console.log(`Task deleted via event delegation: "${deletedText}". Active count: ${taskCount}`);
+                }
+            }
+        });
+    }
+
+    // Task 3: Debug and correct the given program
+    /*
+    -----------------------------------------------------------------------------
+    BUGGY PROGRAM ANALYSIS & CORRECTIONS (Task 3):
+    1. Error: counter increased using string concatenation:
+       Bug: counter.textContent = counter.textContent + 1; // "0" + 1 = "01"
+       Correction: Convert to number or maintain a numeric variable:
+       let count = parseInt(counter.textContent, 10); count++; counter.textContent = count;
+    2. Error: counter not updated after deleting:
+       Bug: Delete handler simply removed item without decrementing count.
+       Correction: Explicitly decrement count (count--) and update counter display.
+    3. Error: Delete listeners attached before list items are created:
+       Bug: document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener(...))
+            ran once at page load when list items did not exist yet!
+       Correction: Use Event Delegation on the existing parent container (taskList)
+            to listen for clicks on current and future delete buttons dynamically.
+    -----------------------------------------------------------------------------
+    */
+    console.log("Week 2 Day 3 Task Manager and Event Delegation initialized.");
+}
+initWeek2Day3TaskManager();
+console.groupEnd();
+
 

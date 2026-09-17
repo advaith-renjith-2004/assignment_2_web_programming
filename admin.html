@@ -234,6 +234,27 @@
             </div>
         </section>
 
+        <!-- Shop Task Manager (Week 2 - Day 3: Dynamic List with Event Delegation) -->
+        <section id="task-manager" class="admin-section">
+            <div class="section-header">
+                <h2>Shop Task Manager</h2>
+                <p class="section-desc">Manage daily spice boutique operations using dynamic DOM & event delegation</p>
+            </div>
+
+            <div class="form-container task-manager-container">
+                <div class="task-counter-row">
+                    <h3>Active Tasks: <span id="taskCounter" class="badge open-badge">0</span></h3>
+                </div>
+                <div class="task-input-row">
+                    <input type="text" id="taskInput" class="task-input-field" placeholder="Enter a new shop task (e.g., Grind 10kg Turmeric)...">
+                    <button id="addTaskBtn" class="btn btn-primary">Add Task</button>
+                </div>
+                <ul id="taskList" class="task-list-ul">
+                    <!-- Dynamically populated tasks with delete buttons -->
+                </ul>
+            </div>
+        </section>
+
         <!-- Console Log Inspector Section -->
         <section id="console-logs" class="admin-section">
             <div class="section-header">
