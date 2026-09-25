@@ -1083,6 +1083,187 @@ BROWSER DEVTOOLS DEBUGGING NOTES (Task 3):
 */
 console.groupEnd();
 
+// ==============================================================================
+// WEEK 4 - DAY 1: CONNECTING FRONTEND TO BACKEND
+// ==============================================================================
+console.group("%c--- Week 4 Day 1: Connecting Frontend to Backend ---", "color: #10b981; font-weight: bold;");
+
+// Task 2: Server-backed Task Manager
+async function initWeek4Day1ServerTaskManager() {
+    const taskList = document.getElementById('taskList');
+    const taskCounter = document.getElementById('taskCounter');
+    const taskInput = document.getElementById('taskInput');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+
+    if (!taskList || !addTaskBtn || !taskInput) return;
+
+    // Helper: refresh list from server
+    async function loadTasksFromServer() {
+        if (typeof getTasks !== 'function') return;
+        try {
+            const response = await getTasks();
+            const tasksArray = response.data || response;
+            taskList.innerHTML = '';
+            if (Array.isArray(tasksArray)) {
+                tasksArray.forEach(task => {
+                    const li = document.createElement('li');
+                    li.className = 'task-item';
+                    li.dataset.id = task.id;
+
+                    const span = document.createElement('span');
+                    span.className = 'task-text';
+                    span.textContent = task.text;
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'task-delete-btn';
+                    deleteBtn.dataset.id = task.id;
+                    deleteBtn.textContent = 'Delete';
+
+                    li.appendChild(span);
+                    li.appendChild(deleteBtn);
+                    taskList.appendChild(li);
+                });
+                if (taskCounter) {
+                    taskCounter.textContent = tasksArray.length;
+                }
+                console.log(`[Task Board] Loaded ${tasksArray.length} tasks from server.`);
+            }
+        } catch (err) {
+            console.warn("[Task Board] Backend server not reachable, using offline state:", err.message);
+        }
+    }
+
+    // Initial load on page open (Task 2 requirement)
+    await loadTasksFromServer();
+
+    // Save new task on server before displaying (Task 2 requirement)
+    const newAddBtn = addTaskBtn.cloneNode(true);
+    addTaskBtn.parentNode.replaceChild(newAddBtn, addTaskBtn);
+
+    newAddBtn.addEventListener('click', async function() {
+        const text = taskInput.value.trim();
+        if (!text) return;
+
+        try {
+            newAddBtn.disabled = true;
+            newAddBtn.textContent = 'Saving...';
+            // Save on server first
+            await addTask(text);
+            console.log(`[Task Board] Task "${text}" saved to server successfully.`);
+            taskInput.value = '';
+            // Refresh list from server after saving
+            await loadTasksFromServer();
+        } catch (err) {
+            console.error("[Task Board] Failed to save task to server:", err.message);
+            alert("Could not save task to server: " + err.message);
+        } finally {
+            newAddBtn.disabled = false;
+            newAddBtn.textContent = 'Add Task';
+        }
+    });
+
+    taskInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            newAddBtn.click();
+        }
+    });
+
+    // Delete task: remove on server before list is refreshed (Task 2 requirement)
+    const newTaskList = taskList.cloneNode(false);
+    taskList.parentNode.replaceChild(newTaskList, taskList);
+    // Re-fill items
+    await loadTasksFromServer();
+
+    newTaskList.addEventListener('click', async function(e) {
+        if (e.target && e.target.classList.contains('task-delete-btn')) {
+            const taskId = e.target.dataset.id;
+            if (!taskId) return;
+            try {
+                e.target.disabled = true;
+                e.target.textContent = 'Deleting...';
+                // Remove on server first
+                await deleteTask(taskId);
+                console.log(`[Task Board] Task #${taskId} deleted on server.`);
+                // Refresh list from server after deleting
+                await loadTasksFromServer();
+            } catch (err) {
+                console.error("[Task Board] Failed to delete task from server:", err.message);
+                alert("Could not delete task from server: " + err.message);
+            }
+        }
+    });
+}
+
+// Task 3: Send enquiry form to POST /api/enquiries using fetch & display server reply
+function initWeek4Day1EnquiryServerSubmit() {
+    const enquiryForm = document.getElementById('enquiryForm');
+    const feedback = document.getElementById('formFeedback');
+    if (!enquiryForm) return;
+
+    enquiryForm.addEventListener('submit', async function(e) {
+        const nameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('emailAddress');
+        const phoneInput = document.getElementById('phoneNum');
+        const categoryInput = document.getElementById('interestCategory');
+        const quantityInput = document.getElementById('orderQuantity');
+        const messageInput = document.getElementById('messageText');
+        const newsletterInput = document.getElementById('newsletter');
+
+        if (!nameInput || !emailInput || !messageInput) return;
+        if (!nameInput.value || !emailInput.value || !messageInput.value) return;
+
+        const enquiryPayload = {
+            fullName: nameInput.value.trim(),
+            emailAddress: emailInput.value.trim(),
+            phoneNum: phoneInput ? phoneInput.value.trim() : '',
+            interestCategory: categoryInput ? categoryInput.value : 'General',
+            orderQuantity: quantityInput ? Number(quantityInput.value) : 1,
+            messageText: messageInput.value.trim(),
+            newsletter: newsletterInput ? newsletterInput.checked : false
+        };
+
+        if (feedback) {
+            feedback.className = 'form-feedback';
+            feedback.style.display = 'block';
+            feedback.textContent = 'Transmitting enquiry to EL Herbs server...';
+        }
+
+        try {
+            if (typeof submitEnquiry === 'function') {
+                const response = await submitEnquiry(enquiryPayload);
+                if (feedback) {
+                    feedback.className = 'form-feedback success';
+                    feedback.style.display = 'block';
+                    feedback.innerHTML = `<strong>Server Response (${response.data ? '#' + response.data.id : 'Success'}):</strong> ${response.message || 'Enquiry successfully recorded!'}`;
+                }
+                console.log("[Enquiry API] Server response:", response);
+            }
+        } catch (err) {
+            console.warn("[Enquiry API] Could not submit to server:", err.message);
+            if (feedback) {
+                feedback.className = 'form-feedback';
+                feedback.style.display = 'block';
+                feedback.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+                feedback.style.color = '#f87171';
+                feedback.textContent = `Server notice: ${err.message}. (Form saved locally)`;
+            }
+        }
+    });
+}
+
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            initWeek4Day1ServerTaskManager();
+            initWeek4Day1EnquiryServerSubmit();
+        });
+    } else {
+        initWeek4Day1ServerTaskManager();
+        initWeek4Day1EnquiryServerSubmit();
+    }
+}
+console.groupEnd();
+
 
 
 

@@ -40,7 +40,7 @@ app.use(cors({
             callback(new Error(`Access blocked by CORS policy: Origin ${origin} not allowed.`));
         }
     },
-    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
 
@@ -63,6 +63,21 @@ let products = [
 let tasks = [
     { id: 1, text: "Restock Ceylon Cinnamon 200g pouches", completed: false, createdAt: new Date().toISOString() },
     { id: 2, text: "Grind 25kg sun-dried Turmeric roots", completed: false, createdAt: new Date().toISOString() }
+];
+
+// Customer Enquiries Array (Week 4 - Day 1 Task 3)
+let enquiries = [
+    {
+        id: 1,
+        fullName: "Priya Nair",
+        emailAddress: "priya@example.com",
+        phoneNum: "9847012345",
+        interestCategory: "Whole Spices",
+        orderQuantity: 10,
+        messageText: "Need wholesale pricing for 10kg Cardamom and Black Pepper.",
+        newsletter: true,
+        createdAt: new Date().toISOString()
+    }
 ];
 
 // ==============================================================================
@@ -174,6 +189,48 @@ app.delete('/api/tasks/:id', (req, res) => {
 
     // Status 204: No Content indicates successful deletion
     return res.status(204).send();
+});
+
+// ------------------------------------------------------------------------------
+// WEEK 4 - DAY 1 TASK 3: /api/enquiries ROUTES
+// ------------------------------------------------------------------------------
+
+// 1. GET /api/enquiries: List all submitted customer enquiries (200 OK)
+app.get('/api/enquiries', (req, res) => {
+    res.status(200).json({
+        success: true,
+        count: enquiries.length,
+        data: enquiries
+    });
+});
+
+// 2. POST /api/enquiries: Receive new customer enquiry from frontend form (201 Created)
+app.post('/api/enquiries', (req, res) => {
+    const { fullName, emailAddress, phoneNum, messageText } = req.body;
+
+    // Validate required fields
+    if (!fullName || !emailAddress || !messageText) {
+        return res.status(400).json({
+            success: false,
+            error: "Full name, email address, and message text are required fields."
+        });
+    }
+
+    const newEnquiry = {
+        id: enquiries.length > 0 ? Math.max(...enquiries.map(e => e.id)) + 1 : 1,
+        ...req.body,
+        status: "received",
+        createdAt: new Date().toISOString()
+    };
+
+    enquiries.push(newEnquiry);
+    console.log(`[POST /api/enquiries] Received enquiry #${newEnquiry.id} from ${newEnquiry.fullName} (${newEnquiry.emailAddress})`);
+
+    return res.status(201).json({
+        success: true,
+        message: `Thank you, ${newEnquiry.fullName}! Your enquiry has been received by EL Herbs & Spices. Our customer care team will contact you at ${newEnquiry.emailAddress} shortly.`,
+        data: newEnquiry
+    });
 });
 
 // ==============================================================================
