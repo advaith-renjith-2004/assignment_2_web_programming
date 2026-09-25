@@ -9,7 +9,7 @@
 
 ---
 
-## 🌿 About The Project
+## About The Project
 
 **EL Herbs and Spices Shop** is an end-to-end full-stack web application for an authentic organic spice boutique based in Nalanchira, Trivandrum. The platform features an interactive, responsive frontend paired with a secure Node.js & Express REST API backend and a MySQL relational database.
 
@@ -21,7 +21,7 @@ This repository tracks the complete, day-by-day progression across:
 
 ---
 
-## 📁 Repository Architecture
+## Repository Architecture
 
 ```text
 assignment_2_web_programming/
@@ -70,15 +70,15 @@ assignment_2_web_programming/
 
 ---
 
-## 🚀 Day-by-Day Implementation Breakdown
+## Day-by-Day Implementation Breakdown
 
-### 📌 Week 1 – Website Setup and JavaScript Basics (`Assignment # 2.a`)
+### Week 1 – Website Setup and JavaScript Basics (Assignment # 2.a)
 - **Day 1 (Setup & HTML/CSS):** Folder structure configured; semantic `index.html` and `admin.html`; styling in `css/style.css` using Flexbox navbar, CSS Grid product catalog, and mobile media queries.
 - **Day 2 (Variables, Data Types & Operators):** Linked `js/app.js`; declared shop variables using `var`, `let`, `const`; created `products` array of 8 objects; performed arithmetic, equality (`==` vs `===`), logical operations, 5% GST calculations, and documented `'10' + 5` vs `'10' - 5` type coercion.
 
 ---
 
-### 📌 Week 2 – DOM, Events, Data and Form Validation (`Assignment # 2.b`)
+### Week 2 – DOM, Events, Data and Form Validation (Assignment # 2.b)
 - **Day 1 (DOM Manipulation):** Added empty `#productGrid` container; implemented branding updater using `textContent`, `setAttribute`, and `classList.toggle`; implemented `renderProducts(list)` with `.out-of-stock` styling; documented `textContent` vs `innerHTML`.
 - **Day 2 (Event Handling):** Cart button clicks with toast message, product card hover with `.zoom` scale class, keyboard search (`Enter` to query, `Escape` to clear); `event.preventDefault()` on form submit; documented why `addEventListener` > inline `onclick`.
 - **Day 3 (Dynamic List with Event Delegation):** Shop task manager in `admin.html` with `#taskInput`, `#addTaskBtn`, `#taskList`, and `#taskCounter`; event delegation on `#taskList`; corrected counter string concatenation bugs.
@@ -87,7 +87,7 @@ assignment_2_web_programming/
 
 ---
 
-### 📌 Week 3 – JSON, Fetch, Git Collaboration and Express Server (`Assignment # 2.c`)
+### Week 3 – JSON, Fetch, Git Collaboration and Express Server (Assignment # 2.c)
 - **Day 1 (JSON & Fetch API):** Product catalog in `data/products.json`; loaded data via `fetch()` with `response.ok`; shopping cart in `localStorage` with `JSON.stringify()` / `JSON.parse()`; JSON syntax errors documented.
 - **Day 2 (Async/Await & Error Handling):** `loadProducts()` using `async`/`await` with `try`/`catch`/`finally` loading spinner; async product search; runtime error catches (`TypeError`, `ReferenceError`).
 - **Day 3 (Git Collaboration Workflow):** Documented `.gitignore` file; branching, pull request reviews, and merge conflict resolution notes; created annotated tag `v0.1.0` with Semantic Versioning documentation.
@@ -96,7 +96,7 @@ assignment_2_web_programming/
 
 ---
 
-### 📌 Week 4 – REST API, Databases and Security (`Assignment # 2.d`)
+### Week 4 – REST API, Databases and Security (Assignment # 2.d)
 - **Day 1 – Connecting the Frontend to the Backend:**
   - Written `api.js` client helper with `getTasks()`, `addTask(text)`, `deleteTask(id)`, and `submitEnquiry(enquiryData)` using `fetch`, `Content-Type: application/json` headers, and `JSON.stringify()`.
   - Refactored Admin Task Board to load tasks from server on page load, save new tasks on server before displaying, and delete on server before list refresh.
@@ -128,7 +128,7 @@ assignment_2_web_programming/
 
 ---
 
-## 🛡️ SQL Injection Demonstration: Before vs. After
+## SQL Injection Demonstration: Before vs. After
 
 ### The Attack Payload:
 ```text
@@ -152,7 +152,7 @@ assignment_2_web_programming/
 
 ---
 
-## 📡 REST API Endpoint Reference
+## REST API Endpoint Reference
 
 | Method | Endpoint | Description | Status Codes |
 |:---|:---|:---|:---:|
@@ -177,7 +177,7 @@ assignment_2_web_programming/
 
 ---
 
-## 🏃‍♂️ How to Run & Verify
+## How to Run & Verify
 
 ### 1. Running Frontend
 - **Storefront:** Open `index.html` in browser.
@@ -209,10 +209,11 @@ bash scripts/test_validation_curl.sh
 
 ---
 
-## 📜 Complete Git Commit History
+## Complete Git Commit History
 
 | Commit Hash | Commit Message |
 |:---|:---|
+| `3fa4683` | **Week 4 - Final:** Comprehensive README update with Week 4 documentation, REST API spec, and SQL injection proofs |
 | `bd71166` | **Week 4 - Day 5:** MySQL database integration with connection pool, parameterized CRUD queries, SQL injection demo & defense |
 | `e97e316` | **Week 4 - Day 4:** Database schema design in SQL, CRUD operations, and SQL vs NoSQL comprehensive comparison |
 | `6870310` | **Week 4 - Day 3:** Environment variables with dotenv, product validation middleware, and security documentation |
