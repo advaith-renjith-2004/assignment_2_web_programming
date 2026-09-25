@@ -4,6 +4,7 @@
    Week 3 - Day 4 & Day 5 Deliverables (Full REST API with Middleware Pipeline)
    ============================================================================== */
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -23,13 +24,10 @@ app.use((req, res, next) => {
 // 2. Request Body Parser Middleware
 app.use(express.json());
 
-// 3. CORS Middleware: Restricting access to authorized frontend origins (Day 5 Task 1)
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'http://127.0.0.1:5500',
-    'https://advaith-renjith-2004.github.io'
-];
+// 3. CORS Middleware: Restricting access to authorized frontend origins (Day 3 Task 1 & 2)
+// Origins loaded dynamically from process.env.ALLOWED_ORIGIN
+const rawAllowedOrigins = process.env.ALLOWED_ORIGIN || 'http://localhost:3000,http://127.0.0.1:5500,http://localhost:5500,https://advaith-renjith-2004.github.io';
+const allowedOrigins = rawAllowedOrigins.split(',').map(origin => origin.trim());
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -137,30 +135,68 @@ app.get('/api/products/:id', (req, res) => {
     });
 });
 
-// 3. POST /api/products - Create new product (Status 201 Created / 400 Bad Request)
-app.post('/api/products', (req, res) => {
+// ==============================================================================
+// WEEK 4 - DAY 3 TASK 2: PRODUCT VALIDATION MIDDLEWARE
+// Verifies:
+// 1. name is not empty (string, trimmed length > 0)
+// 2. price is greater than 0
+// 3. stock is not negative (>= 0)
+// Returns HTTP 400 Bad Request with a descriptive message if any check fails.
+// ==============================================================================
+const validateProduct = (req, res, next) => {
     const { name, price, stock, category } = req.body;
 
-    if (!name || typeof name !== 'string' || name.trim() === '' ||
-        price === undefined || isNaN(Number(price)) || Number(price) <= 0 ||
-        stock === undefined || isNaN(Number(stock)) || Number(stock) < 0 ||
-        !category || typeof category !== 'string' || category.trim() === '') {
+    // Check 1: Name must not be empty
+    if (!name || typeof name !== 'string' || name.trim() === '') {
         return res.status(400).json({
             success: false,
-            error: "Validation failed: 'name' and 'category' are required strings, 'price' must be > 0, and 'stock' must be >= 0."
+            error: "Validation Error: Product name is required and cannot be empty or whitespace."
         });
     }
 
+    // Check 2: Price must be a valid number greater than 0
+    const numPrice = Number(price);
+    if (price === undefined || isNaN(numPrice) || numPrice <= 0) {
+        return res.status(400).json({
+            success: false,
+            error: "Validation Error: Product price must be a valid numeric value strictly greater than 0."
+        });
+    }
+
+    // Check 3: Stock must be a non-negative number (>= 0)
+    const numStock = Number(stock);
+    if (stock === undefined || isNaN(numStock) || numStock < 0) {
+        return res.status(400).json({
+            success: false,
+            error: "Validation Error: Stock quantity must be a non-negative numeric value (0 or greater)."
+        });
+    }
+
+    // Attach validated and trimmed values
+    req.body.name = name.trim();
+    req.body.price = numPrice;
+    req.body.stock = numStock;
+    req.body.category = (category && typeof category === 'string' && category.trim() !== '')
+        ? category.trim()
+        : 'Whole Spices';
+
+    next(); // Pass to route handler
+};
+
+// 3. POST /api/products - Create new product with validateProduct middleware (Status 201 Created)
+app.post('/api/products', validateProduct, (req, res) => {
+    const { name, price, stock, category } = req.body;
+
     const newProduct = {
         id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-        name: name.trim(),
-        price: Number(price),
-        stock: Number(stock),
-        category: category.trim()
+        name,
+        price,
+        stock,
+        category
     };
 
     products.push(newProduct);
-    console.log(`[POST /api/products] Created product #${newProduct.id}: "${newProduct.name}"`);
+    console.log(`[POST /api/products] Created product #${newProduct.id}: "${newProduct.name}" (Price: ₹${newProduct.price}, Stock: ${newProduct.stock}kg)`);
 
     return res.status(201).json({
         success: true,
@@ -169,8 +205,8 @@ app.post('/api/products', (req, res) => {
     });
 });
 
-// 4. PUT /api/products/:id - Update existing product (Status 200 OK / 400 Bad Request / 404 Not Found)
-app.put('/api/products/:id', (req, res) => {
+// 4. PUT /api/products/:id - Update existing product with validateProduct middleware (Status 200 OK)
+app.put('/api/products/:id', validateProduct, (req, res) => {
     const productId = parseInt(req.params.id, 10);
 
     if (isNaN(productId)) {
@@ -190,26 +226,16 @@ app.put('/api/products/:id', (req, res) => {
 
     const { name, price, stock, category } = req.body;
 
-    if (!name || typeof name !== 'string' || name.trim() === '' ||
-        price === undefined || isNaN(Number(price)) || Number(price) <= 0 ||
-        stock === undefined || isNaN(Number(stock)) || Number(stock) < 0 ||
-        !category || typeof category !== 'string' || category.trim() === '') {
-        return res.status(400).json({
-            success: false,
-            error: "Validation failed: 'name' and 'category' are required strings, 'price' must be > 0, and 'stock' must be >= 0."
-        });
-    }
-
     const updatedProduct = {
         id: productId,
-        name: name.trim(),
-        price: Number(price),
-        stock: Number(stock),
-        category: category.trim()
+        name,
+        price,
+        stock,
+        category
     };
 
     products[productIndex] = updatedProduct;
-    console.log(`[PUT /api/products/:id] Updated product #${productId}: "${updatedProduct.name}"`);
+    console.log(`[PUT /api/products/:id] Updated product #${productId}: "${updatedProduct.name}" (Price: ₹${updatedProduct.price}, Stock: ${updatedProduct.stock}kg)`);
 
     return res.status(200).json({
         success: true,
