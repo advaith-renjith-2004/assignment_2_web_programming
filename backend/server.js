@@ -94,7 +94,12 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// GET /api/products - Product catalog listing (Day 4 Task 1)
+// ==============================================================================
+// WEEK 4 - DAY 2 TASK 1: COMPLETE REST API FOR PRODUCTS (ALL 5 ROUTES)
+// Status codes used: 200 (OK), 201 (Created), 204 (No Content), 400 (Bad Request), 404 (Not Found)
+// ==============================================================================
+
+// 1. GET /api/products - Read all products (Status 200)
 app.get('/api/products', (req, res) => {
     res.status(200).json({
         success: true,
@@ -103,14 +108,46 @@ app.get('/api/products', (req, res) => {
     });
 });
 
-// POST /api/products - Create new spice item (Day 4 Task 2)
+// 2. GET /api/products/:id - Read single product by ID (Status 200 / 400 / 404)
+// Corrected route addressing Task 3 bug: parses req.params.id to number and handles 404
+app.get('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+
+    // Validation: id must be a valid integer
+    if (isNaN(productId)) {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid product ID. Must be a numeric integer."
+        });
+    }
+
+    const product = products.find(p => p.id === productId);
+
+    // If product is not found, must send 404 Not Found (fixes Task 3 bug)
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            error: `Product with ID #${productId} not found.`
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: product
+    });
+});
+
+// 3. POST /api/products - Create new product (Status 201 Created / 400 Bad Request)
 app.post('/api/products', (req, res) => {
     const { name, price, stock, category } = req.body;
 
-    if (!name || price === undefined || stock === undefined || !category) {
+    if (!name || typeof name !== 'string' || name.trim() === '' ||
+        price === undefined || isNaN(Number(price)) || Number(price) <= 0 ||
+        stock === undefined || isNaN(Number(stock)) || Number(stock) < 0 ||
+        !category || typeof category !== 'string' || category.trim() === '') {
         return res.status(400).json({
             success: false,
-            error: "All fields are required: name, price, stock, category."
+            error: "Validation failed: 'name' and 'category' are required strings, 'price' must be > 0, and 'stock' must be >= 0."
         });
     }
 
@@ -123,12 +160,116 @@ app.post('/api/products', (req, res) => {
     };
 
     products.push(newProduct);
+    console.log(`[POST /api/products] Created product #${newProduct.id}: "${newProduct.name}"`);
+
     return res.status(201).json({
         success: true,
         message: "Product created successfully",
         data: newProduct
     });
 });
+
+// 4. PUT /api/products/:id - Update existing product (Status 200 OK / 400 Bad Request / 404 Not Found)
+app.put('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+
+    if (isNaN(productId)) {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid product ID. Must be a numeric integer."
+        });
+    }
+
+    const productIndex = products.findIndex(p => p.id === productId);
+    if (productIndex === -1) {
+        return res.status(404).json({
+            success: false,
+            error: `Product with ID #${productId} not found.`
+        });
+    }
+
+    const { name, price, stock, category } = req.body;
+
+    if (!name || typeof name !== 'string' || name.trim() === '' ||
+        price === undefined || isNaN(Number(price)) || Number(price) <= 0 ||
+        stock === undefined || isNaN(Number(stock)) || Number(stock) < 0 ||
+        !category || typeof category !== 'string' || category.trim() === '') {
+        return res.status(400).json({
+            success: false,
+            error: "Validation failed: 'name' and 'category' are required strings, 'price' must be > 0, and 'stock' must be >= 0."
+        });
+    }
+
+    const updatedProduct = {
+        id: productId,
+        name: name.trim(),
+        price: Number(price),
+        stock: Number(stock),
+        category: category.trim()
+    };
+
+    products[productIndex] = updatedProduct;
+    console.log(`[PUT /api/products/:id] Updated product #${productId}: "${updatedProduct.name}"`);
+
+    return res.status(200).json({
+        success: true,
+        message: `Product #${productId} updated successfully`,
+        data: updatedProduct
+    });
+});
+
+// 5. DELETE /api/products/:id - Delete product by ID (Status 204 No Content / 400 Bad Request / 404 Not Found)
+app.delete('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+
+    if (isNaN(productId)) {
+        return res.status(400).json({
+            success: false,
+            error: "Invalid product ID. Must be a numeric integer."
+        });
+    }
+
+    const productIndex = products.findIndex(p => p.id === productId);
+    if (productIndex === -1) {
+        return res.status(404).json({
+            success: false,
+            error: `Product with ID #${productId} not found.`
+        });
+    }
+
+    const removedProduct = products.splice(productIndex, 1)[0];
+    console.log(`[DELETE /api/products/:id] Removed product #${productId}: "${removedProduct.name}"`);
+
+    // Status 204: No Content indicates success with no response body
+    return res.status(204).send();
+});
+
+/* ==============================================================================
+   WEEK 4 - DAY 2 TASK 3: BUGGY ROUTE ANALYSIS & CORRECTIONS
+   ==============================================================================
+   
+   THE GIVEN BUGGY ROUTE:
+   ------------------------------------------------------------------------------
+   app.get('/api/products/:id', (req, res) => {
+       const product = products.find(p => p.id === req.params.id); // BUG 1: Type mismatch with strict equality ===
+       res.json(product);                                          // BUG 2: Sends 200 with empty body if not found
+   });
+   ------------------------------------------------------------------------------
+
+   EXPLANATION OF THE TWO CRITICAL BUGS:
+   1. Strict Equality Type Mismatch (p.id === req.params.id):
+      - Express URL route parameters (`req.params.id`) are ALWAYS strings (e.g. "1").
+      - The `products` database uses numeric IDs (e.g. 1).
+      - In JavaScript, `1 === "1"` evaluates to `false` because strict equality compares
+        both type and value without coercion. Consequently, `find()` NEVER finds any product.
+      - Fix: Parse `req.params.id` using `parseInt(req.params.id, 10)` before comparing.
+   
+   2. Missing 404 Not Found Status:
+      - When `product` is undefined, `res.json(undefined)` sends an empty response with
+        HTTP 200 OK! A 200 OK falsely informs client apps and frontends that the resource exists.
+      - Fix: Check `if (!product)` and explicitly return `res.status(404).json(...)`.
+   ------------------------------------------------------------------------------
+*/
 
 // ------------------------------------------------------------------------------
 // WEEK 3 - DAY 5 TASK 2: /api/tasks ROUTES

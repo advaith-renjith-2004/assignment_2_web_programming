@@ -1,0 +1,392 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management Admin | EL Herbs & Spices Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-action-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-edit-prod {
+            background: #d97706;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-edit-prod:hover {
+            background: #b45309;
+        }
+        .btn-delete-prod {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn-delete-prod:hover {
+            background: #b91c1c;
+        }
+        .btn-cancel-edit {
+            background: #4b5563;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .btn-cancel-edit:hover {
+            background: #374151;
+        }
+        .notice-banner {
+            padding: 12px 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+        .notice-banner.success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #4ade80;
+            display: block;
+        }
+        .notice-banner.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #f87171;
+            display: block;
+        }
+        .edit-mode-highlight {
+            border: 2px solid #eab308 !important;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+        }
+    </style>
+</head>
+<body class="admin-body">
+
+    <!-- Admin Header -->
+    <header class="site-header admin-header">
+        <div class="header-container">
+            <div class="brand">
+                <img src="images/logo.jpg" alt="EL Logo" class="shop-logo">
+                <div class="brand-text">
+                    <h1 class="shop-title">EL Herbs Product REST Admin</h1>
+                    <p class="shop-tagline">Week 4 Day 2: Complete CRUD Operations via REST API</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="admin.html" class="btn btn-outline">⬅ Task Dashboard</a>
+                <a href="index.html" class="btn btn-primary" style="margin-left: 10px;">Storefront</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Navigation -->
+    <nav class="main-nav admin-nav">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Storefront</a></li>
+                <li><a href="admin.html">Dashboard & Tasks</a></li>
+                <li><a href="admin_products.html" class="active">Product REST Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-content admin-main">
+
+        <!-- Notification Banner -->
+        <div id="adminNotice" class="notice-banner"></div>
+
+        <!-- Add / Edit Product Form (Week 4 - Day 2 Task 2) -->
+        <section id="productFormSection" class="admin-section">
+            <div class="form-container" id="productFormCard">
+                <div class="form-header">
+                    <h2 id="formHeaderTitle">Add New Spice Product (POST)</h2>
+                    <p id="formHeaderSubtitle">Fill the details below to publish a new spice item via REST API</p>
+                </div>
+
+                <form id="productCrudForm" class="enquiry-form">
+                    <!-- Hidden input for holding product ID during PUT edit -->
+                    <input type="hidden" id="editProductId" value="">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodNameInput">Product Name <span class="required">*</span></label>
+                            <input type="text" id="prodNameInput" placeholder="e.g. Star Anise (Chakra Phool)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodCategoryInput">Category <span class="required">*</span></label>
+                            <select id="prodCategoryInput" required>
+                                <option value="Whole Spices">Whole Spices</option>
+                                <option value="Ground Spices">Ground Spices</option>
+                                <option value="Herbs">Herbs</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prodPriceInput">Unit Price (₹) <span class="required">*</span></label>
+                            <input type="number" id="prodPriceInput" min="1" step="0.5" placeholder="e.g. 350" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodStockInput">Stock Quantity (kg) <span class="required">*</span></label>
+                            <input type="number" id="prodStockInput" min="0" placeholder="e.g. 25" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submitProductBtn" class="btn btn-submit">Add Product (POST)</button>
+                        <button type="button" id="cancelEditBtn" class="btn-cancel-edit" style="display: none;">Cancel Edit</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Product Inventory Table with Event Delegation (Week 4 - Day 2 Task 2) -->
+        <section class="admin-section">
+            <div class="section-header">
+                <h2>Live Product Inventory & REST Actions</h2>
+                <p class="section-desc">Manage products using GET, POST, PUT, and DELETE with event delegation</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="price-table admin-table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price (₹)</th>
+                            <th>Stock (kg)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsAdminTbody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 20px;">
+                                <span class="spinner"></span> Loading products from backend server...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <p>&copy; 2026 EL Herbs & Spices Shop. REST API Admin Portal. Course 23EEL43H.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('productsAdminTbody');
+            const form = document.getElementById('productCrudForm');
+            const formHeaderTitle = document.getElementById('formHeaderTitle');
+            const formHeaderSubtitle = document.getElementById('formHeaderSubtitle');
+            const formCard = document.getElementById('productFormCard');
+            const editIdInput = document.getElementById('editProductId');
+            const nameInput = document.getElementById('prodNameInput');
+            const catInput = document.getElementById('prodCategoryInput');
+            const priceInput = document.getElementById('prodPriceInput');
+            const stockInput = document.getElementById('prodStockInput');
+            const submitBtn = document.getElementById('submitProductBtn');
+            const cancelBtn = document.getElementById('cancelEditBtn');
+            const notice = document.getElementById('adminNotice');
+
+            let currentProducts = [];
+
+            function showNotice(msg, type = 'success') {
+                notice.className = `notice-banner ${type}`;
+                notice.textContent = msg;
+                notice.style.display = 'block';
+                setTimeout(() => { notice.style.display = 'none'; }, 5000);
+            }
+
+            // Function to fetch and render all products (GET /api/products)
+            async function fetchAndRenderProducts() {
+                try {
+                    const response = await getProducts();
+                    currentProducts = response.data || response;
+                    renderTable(currentProducts);
+                } catch (err) {
+                    console.warn("Could not load products from server:", err.message);
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #f87171; padding: 20px;">
+                        ⚠️ Unable to reach backend at ${API_BASE_URL}/api/products. (Ensure Express server is running)
+                    </td></tr>`;
+                }
+            }
+
+            function renderTable(productsList) {
+                tbody.innerHTML = '';
+                if (!productsList || productsList.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No products in inventory.</td></tr>';
+                    return;
+                }
+
+                productsList.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.dataset.id = p.id;
+
+                    let statusClass = 'status-in';
+                    let statusLabel = 'In Stock';
+                    if (p.stock === 0) {
+                        statusClass = 'status-out';
+                        statusLabel = 'Out of Stock';
+                    } else if (p.stock < 10) {
+                        statusClass = 'status-low';
+                        statusLabel = 'Low Stock';
+                    }
+
+                    tr.innerHTML = `
+                        <td>#${p.id}</td>
+                        <td><strong>${p.name}</strong></td>
+                        <td>${p.category}</td>
+                        <td>₹${Number(p.price).toFixed(2)}</td>
+                        <td>${p.stock} kg</td>
+                        <td><span class="status-indicator ${statusClass}">${statusLabel}</span></td>
+                        <td>
+                            <div class="admin-action-btn-group">
+                                <button type="button" class="btn-edit-prod" data-id="${p.id}">Edit (PUT)</button>
+                                <button type="button" class="btn-delete-prod" data-id="${p.id}">Delete</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // EVENT DELEGATION ON TBODY for Edit and Delete buttons (Week 4 - Day 2 Task 2 requirement)
+            tbody.addEventListener('click', async (e) => {
+                const target = e.target;
+
+                // 1. EDIT BUTTON CLICK: Fills the form and prepares PUT
+                if (target.classList.contains('btn-edit-prod')) {
+                    const id = parseInt(target.dataset.id, 10);
+                    const prod = currentProducts.find(p => p.id === id);
+                    if (!prod) return;
+
+                    // Fill form
+                    editIdInput.value = prod.id;
+                    nameInput.value = prod.name;
+                    catInput.value = prod.category;
+                    priceInput.value = prod.price;
+                    stockInput.value = prod.stock;
+
+                    // Update UI state to Edit Mode
+                    formHeaderTitle.textContent = `Edit Spice Product #${prod.id} (PUT)`;
+                    formHeaderSubtitle.textContent = `Editing "${prod.name}". Changes will be saved via PUT /api/products/${prod.id}`;
+                    submitBtn.textContent = 'Save Changes (PUT)';
+                    cancelBtn.style.display = 'inline-block';
+                    formCard.classList.add('edit-mode-highlight');
+
+                    // Scroll to form
+                    document.getElementById('productFormSection').scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // 2. DELETE BUTTON CLICK: Uses event delegation to delete via DELETE /api/products/:id
+                if (target.classList.contains('btn-delete-prod')) {
+                    const id = parseInt(target.dataset.id, 10);
+                    const prod = currentProducts.find(p => p.id === id);
+                    const prodName = prod ? prod.name : `#${id}`;
+
+                    if (!confirm(`Are you sure you want to delete "${prodName}" from inventory?`)) {
+                        return;
+                    }
+
+                    try {
+                        target.disabled = true;
+                        target.textContent = 'Deleting...';
+                        await deleteProduct(id);
+                        showNotice(`Product "${prodName}" deleted successfully (Status 204 No Content).`);
+                        await fetchAndRenderProducts();
+                    } catch (err) {
+                        showNotice(`Error deleting product: ${err.message}`, 'error');
+                        target.disabled = false;
+                        target.textContent = 'Delete';
+                    }
+                }
+            });
+
+            // Form Submit: Handles either POST (new) or PUT (edit)
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const isEdit = editIdInput.value !== '';
+                const payload = {
+                    name: nameInput.value.trim(),
+                    category: catInput.value,
+                    price: Number(priceInput.value),
+                    stock: Number(stockInput.value)
+                };
+
+                submitBtn.disabled = true;
+
+                try {
+                    if (isEdit) {
+                        // PUT update
+                        const id = parseInt(editIdInput.value, 10);
+                        submitBtn.textContent = 'Updating...';
+                        const updated = await updateProduct(id, payload);
+                        showNotice(`Product #${id} ("${payload.name}") updated successfully via PUT (Status 200 OK).`);
+                        resetForm();
+                    } else {
+                        // POST create
+                        submitBtn.textContent = 'Creating...';
+                        const created = await addProduct(payload);
+                        showNotice(`New product "${payload.name}" created successfully via POST (Status 201 Created).`);
+                        resetForm();
+                    }
+                    await fetchAndRenderProducts();
+                } catch (err) {
+                    showNotice(`Operation failed: ${err.message}`, 'error');
+                } finally {
+                    submitBtn.disabled = false;
+                    if (!editIdInput.value) {
+                        submitBtn.textContent = 'Add Product (POST)';
+                    }
+                }
+            });
+
+            // Cancel Edit Mode
+            cancelBtn.addEventListener('click', resetForm);
+
+            function resetForm() {
+                form.reset();
+                editIdInput.value = '';
+                formHeaderTitle.textContent = 'Add New Spice Product (POST)';
+                formHeaderSubtitle.textContent = 'Fill the details below to publish a new spice item via REST API';
+                submitBtn.textContent = 'Add Product (POST)';
+                cancelBtn.style.display = 'none';
+                formCard.classList.remove('edit-mode-highlight');
+            }
+
+            // Initial load
+            fetchAndRenderProducts();
+        });
+    </script>
+</body>
+</html>
