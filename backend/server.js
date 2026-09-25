@@ -7,6 +7,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const db = require('./db/connection');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -97,42 +98,55 @@ app.get('/api/health', (req, res) => {
 // Status codes used: 200 (OK), 201 (Created), 204 (No Content), 400 (Bad Request), 404 (Not Found)
 // ==============================================================================
 
-// 1. GET /api/products - Read all products (Status 200)
-app.get('/api/products', (req, res) => {
-    res.status(200).json({
-        success: true,
-        count: products.length,
-        data: products
-    });
+// ==============================================================================
+// WEEK 4 - DAY 5 TASK 2: REWRITE 5 PRODUCT ROUTES TO USE DATABASE (db.query)
+// Using async/await and parameterized queries with '?' placeholders
+// Status codes: 200 (OK), 201 (Created), 204 (No Content), 400 (Bad Request), 404 (Not Found)
+// ==============================================================================
+
+// 1. GET /api/products - Read all products from MySQL database (Status 200)
+app.get('/api/products', async (req, res, next) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM products ORDER BY id ASC');
+        return res.status(200).json({
+            success: true,
+            count: rows.length,
+            data: rows
+        });
+    } catch (err) {
+        next(err);
+    }
 });
 
-// 2. GET /api/products/:id - Read single product by ID (Status 200 / 400 / 404)
-// Corrected route addressing Task 3 bug: parses req.params.id to number and handles 404
-app.get('/api/products/:id', (req, res) => {
-    const productId = parseInt(req.params.id, 10);
+// 2. GET /api/products/:id - Read single product by ID with parameterized query (Status 200 / 400 / 404)
+app.get('/api/products/:id', async (req, res, next) => {
+    try {
+        const productId = parseInt(req.params.id, 10);
 
-    // Validation: id must be a valid integer
-    if (isNaN(productId)) {
-        return res.status(400).json({
-            success: false,
-            error: "Invalid product ID. Must be a numeric integer."
+        if (isNaN(productId)) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid product ID. Must be a numeric integer."
+            });
+        }
+
+        // Parameterized query using '?' placeholder
+        const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [productId]);
+
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: `Product with ID #${productId} not found.`
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: rows[0]
         });
+    } catch (err) {
+        next(err);
     }
-
-    const product = products.find(p => p.id === productId);
-
-    // If product is not found, must send 404 Not Found (fixes Task 3 bug)
-    if (!product) {
-        return res.status(404).json({
-            success: false,
-            error: `Product with ID #${productId} not found.`
-        });
-    }
-
-    return res.status(200).json({
-        success: true,
-        data: product
-    });
 });
 
 // ==============================================================================
@@ -183,91 +197,270 @@ const validateProduct = (req, res, next) => {
     next(); // Pass to route handler
 };
 
-// 3. POST /api/products - Create new product with validateProduct middleware (Status 201 Created)
-app.post('/api/products', validateProduct, (req, res) => {
-    const { name, price, stock, category } = req.body;
+// 3. POST /api/products - Create new product in MySQL with parameterized query (Status 201 Created)
+app.post('/api/products', validateProduct, async (req, res, next) => {
+    try {
+        const { name, price, stock, category } = req.body;
 
-    const newProduct = {
-        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-        name,
-        price,
-        stock,
-        category
-    };
+        const [result] = await db.query(
+            'INSERT INTO products (name, price, stock, category) VALUES (?, ?, ?, ?)',
+            [name, price, stock, category]
+        );
 
-    products.push(newProduct);
-    console.log(`[POST /api/products] Created product #${newProduct.id}: "${newProduct.name}" (Price: ₹${newProduct.price}, Stock: ${newProduct.stock}kg)`);
+        const newProduct = {
+            id: result.insertId,
+            name,
+            price,
+            stock,
+            category
+        };
 
-    return res.status(201).json({
-        success: true,
-        message: "Product created successfully",
-        data: newProduct
-    });
+        console.log(`[POST /api/products] Saved product #${newProduct.id}: "${newProduct.name}" to database.`);
+
+        return res.status(201).json({
+            success: true,
+            message: "Product created successfully in database",
+            data: newProduct
+        });
+    } catch (err) {
+        next(err);
+    }
 });
 
-// 4. PUT /api/products/:id - Update existing product with validateProduct middleware (Status 200 OK)
-app.put('/api/products/:id', validateProduct, (req, res) => {
-    const productId = parseInt(req.params.id, 10);
+// 4. PUT /api/products/:id - Update product in MySQL with parameterized query (Status 200 OK)
+app.put('/api/products/:id', validateProduct, async (req, res, next) => {
+    try {
+        const productId = parseInt(req.params.id, 10);
 
-    if (isNaN(productId)) {
-        return res.status(400).json({
-            success: false,
-            error: "Invalid product ID. Must be a numeric integer."
+        if (isNaN(productId)) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid product ID. Must be a numeric integer."
+            });
+        }
+
+        const { name, price, stock, category } = req.body;
+
+        const [result] = await db.query(
+            'UPDATE products SET name = ?, price = ?, stock = ?, category = ? WHERE id = ?',
+            [name, price, stock, category, productId]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                error: `Product with ID #${productId} not found.`
+            });
+        }
+
+        const updatedProduct = {
+            id: productId,
+            name,
+            price,
+            stock,
+            category
+        };
+
+        console.log(`[PUT /api/products/:id] Updated product #${productId}: "${updatedProduct.name}" in database.`);
+
+        return res.status(200).json({
+            success: true,
+            message: `Product #${productId} updated successfully in database`,
+            data: updatedProduct
         });
+    } catch (err) {
+        next(err);
     }
-
-    const productIndex = products.findIndex(p => p.id === productId);
-    if (productIndex === -1) {
-        return res.status(404).json({
-            success: false,
-            error: `Product with ID #${productId} not found.`
-        });
-    }
-
-    const { name, price, stock, category } = req.body;
-
-    const updatedProduct = {
-        id: productId,
-        name,
-        price,
-        stock,
-        category
-    };
-
-    products[productIndex] = updatedProduct;
-    console.log(`[PUT /api/products/:id] Updated product #${productId}: "${updatedProduct.name}" (Price: ₹${updatedProduct.price}, Stock: ${updatedProduct.stock}kg)`);
-
-    return res.status(200).json({
-        success: true,
-        message: `Product #${productId} updated successfully`,
-        data: updatedProduct
-    });
 });
 
-// 5. DELETE /api/products/:id - Delete product by ID (Status 204 No Content / 400 Bad Request / 404 Not Found)
-app.delete('/api/products/:id', (req, res) => {
-    const productId = parseInt(req.params.id, 10);
+// 5. DELETE /api/products/:id - Delete product from MySQL by ID (Status 204 No Content)
+app.delete('/api/products/:id', async (req, res, next) => {
+    try {
+        const productId = parseInt(req.params.id, 10);
 
-    if (isNaN(productId)) {
-        return res.status(400).json({
-            success: false,
-            error: "Invalid product ID. Must be a numeric integer."
-        });
+        if (isNaN(productId)) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid product ID. Must be a numeric integer."
+            });
+        }
+
+        const [result] = await db.query('DELETE FROM products WHERE id = ?', [productId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                error: `Product with ID #${productId} not found.`
+            });
+        }
+
+        console.log(`[DELETE /api/products/:id] Deleted product #${productId} from database.`);
+        return res.status(204).send();
+    } catch (err) {
+        next(err);
     }
+});
 
-    const productIndex = products.findIndex(p => p.id === productId);
-    if (productIndex === -1) {
-        return res.status(404).json({
-            success: false,
-            error: `Product with ID #${productId} not found.`
+// ==============================================================================
+// WEEK 4 - DAY 5 TASK 3: SQL INJECTION SEARCH DEMONSTRATION & MITIGATION
+// ==============================================================================
+
+// 1. VULNERABLE ROUTE: Builds SQL by concatenating strings directly
+// Attacker input: ' OR '1'='1
+// Result: WHERE name LIKE '%' OR '1'='1%' evaluates to TRUE for all rows, leaking entire database!
+app.get('/api/products/search-vulnerable', async (req, res, next) => {
+    try {
+        const q = req.query.q || '';
+        // CRITICAL VULNERABILITY: Directly joining untrusted user input into SQL
+        const sql = "SELECT * FROM products WHERE name LIKE '%" + q + "%'";
+        console.log(`[VULNERABLE SQL EXECUTED]: ${sql}`);
+
+        const [rows] = await db.query(sql);
+
+        return res.status(200).json({
+            success: true,
+            securityState: "VULNERABLE (Raw String Concatenation)",
+            queryExecuted: sql,
+            matchCount: rows.length,
+            data: rows
         });
+    } catch (err) {
+        next(err);
     }
+});
 
-    const removedProduct = products.splice(productIndex, 1)[0];
-    console.log(`[DELETE /api/products/:id] Removed product #${productId}: "${removedProduct.name}"`);
+// 2. SECURE ROUTE: Uses Parameterized Query with '?' Placeholder
+// Protected against SQL Injection: Database engine treats input as pure literal string data.
+app.get('/api/products/search', async (req, res, next) => {
+    try {
+        const q = req.query.q || '';
+        // SECURE DEFENSE: Using parameterized query with '?' placeholder
+        const sql = "SELECT * FROM products WHERE name LIKE ?";
+        const param = `%${q}%`;
+        console.log(`[SECURE PARAMETERIZED QUERY]: ${sql} with parameter: [${param}]`);
 
-    // Status 204: No Content indicates success with no response body
-    return res.status(204).send();
+        const [rows] = await db.query(sql, [param]);
+
+        return res.status(200).json({
+            success: true,
+            securityState: "SECURE (Parameterized Query with ? placeholder)",
+            matchCount: rows.length,
+            data: rows
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ==============================================================================
+// WEEK 4 - DAY 5 TASK 3: STUDENTS RESOURCE - ALL 5 REST ROUTES (DATABASE BACKED)
+// Repeats the same 5 CRUD routes once for a 'students' table
+// ==============================================================================
+
+// 1. GET /api/students - Read all students (Status 200)
+app.get('/api/students', async (req, res, next) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM students ORDER BY id ASC');
+        return res.status(200).json({
+            success: true,
+            count: rows.length,
+            data: rows
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 2. GET /api/students/:id - Read single student by ID (Status 200 / 400 / 404)
+app.get('/api/students/:id', async (req, res, next) => {
+    try {
+        const studentId = parseInt(req.params.id, 10);
+        if (isNaN(studentId)) {
+            return res.status(400).json({ success: false, error: "Invalid student ID. Must be a numeric integer." });
+        }
+        const [rows] = await db.query('SELECT * FROM students WHERE id = ?', [studentId]);
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ success: false, error: `Student with ID #${studentId} not found.` });
+        }
+        return res.status(200).json({ success: true, data: rows[0] });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 3. POST /api/students - Create new student (Status 201 / 400)
+app.post('/api/students', async (req, res, next) => {
+    try {
+        const { roll_no, name, email, course, marks } = req.body;
+        if (!roll_no || !name || !email || !course) {
+            return res.status(400).json({
+                success: false,
+                error: "All student fields are required: roll_no, name, email, course."
+            });
+        }
+        const numMarks = marks !== undefined ? Number(marks) : 0.00;
+        const [result] = await db.query(
+            'INSERT INTO students (roll_no, name, email, course, marks) VALUES (?, ?, ?, ?, ?)',
+            [roll_no.trim(), name.trim(), email.trim(), course.trim(), numMarks]
+        );
+        const newStudent = { id: result.insertId, roll_no, name, email, course, marks: numMarks };
+        return res.status(201).json({
+            success: true,
+            message: "Student created successfully in database",
+            data: newStudent
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 4. PUT /api/students/:id - Update student by ID (Status 200 / 400 / 404)
+app.put('/api/students/:id', async (req, res, next) => {
+    try {
+        const studentId = parseInt(req.params.id, 10);
+        if (isNaN(studentId)) {
+            return res.status(400).json({ success: false, error: "Invalid student ID. Must be a numeric integer." });
+        }
+        const { roll_no, name, email, course, marks } = req.body;
+        if (!roll_no || !name || !email || !course) {
+            return res.status(400).json({
+                success: false,
+                error: "All student fields are required: roll_no, name, email, course."
+            });
+        }
+        const numMarks = marks !== undefined ? Number(marks) : 0.00;
+        const [result] = await db.query(
+            'UPDATE students SET roll_no = ?, name = ?, email = ?, course = ?, marks = ? WHERE id = ?',
+            [roll_no.trim(), name.trim(), email.trim(), course.trim(), numMarks, studentId]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, error: `Student with ID #${studentId} not found.` });
+        }
+        return res.status(200).json({
+            success: true,
+            message: `Student #${studentId} updated successfully in database`,
+            data: { id: studentId, roll_no, name, email, course, marks: numMarks }
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 5. DELETE /api/students/:id - Delete student by ID (Status 204 / 400 / 404)
+app.delete('/api/students/:id', async (req, res, next) => {
+    try {
+        const studentId = parseInt(req.params.id, 10);
+        if (isNaN(studentId)) {
+            return res.status(400).json({ success: false, error: "Invalid student ID. Must be a numeric integer." });
+        }
+        const [result] = await db.query('DELETE FROM students WHERE id = ?', [studentId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, error: `Student with ID #${studentId} not found.` });
+        }
+        return res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
 });
 
 /* ==============================================================================

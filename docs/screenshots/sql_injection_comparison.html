@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection Proof: Before vs After Parameterized Queries</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b1120; color: #e2e8f0; margin: 0; padding: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #f8fafc; font-size: 26px; margin-bottom: 6px; }
+        p.subtitle { color: #94a3b8; font-size: 15px; margin-top: 0; margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .card { background: #1e293b; border-radius: 10px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 2px solid transparent; }
+        .card.danger { border-color: #ef4444; }
+        .card.success { border-color: #10b981; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-bottom: 12px; }
+        .badge.danger { background: #ef4444; color: white; }
+        .badge.success { background: #10b981; color: white; }
+        .code-box { background: #0f172a; padding: 14px; border-radius: 6px; font-family: "Consolas", monospace; font-size: 13px; overflow-x: auto; line-height: 1.5; }
+        .red { color: #f87171; font-weight: bold; }
+        .green { color: #4ade80; font-weight: bold; }
+        .yellow { color: #fde047; }
+        .cyan { color: #38bdf8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; font-family: monospace; }
+        th, td { border: 1px solid #334155; padding: 6px 10px; text-align: left; }
+        th { background: #334155; color: #f8fafc; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ SQL Injection Demonstration: Before vs. After Parameterized Queries</h1>
+        <p class="subtitle">Course 23EEL43H Web Programming | EL Herbs & Spices Shop | Attack Payload: <code>' OR '1'='1</code></p>
+        
+        <div class="grid">
+            <!-- BEFORE -->
+            <div class="card danger">
+                <span class="badge danger">❌ Before: Vulnerable (String Concat)</span>
+                <h3>Route: <code>GET /api/products/search-vulnerable?q=' OR '1'='1</code></h3>
+                <div class="code-box">
+                    <span class="yellow">// SQL constructed via string concatenation:</span><br>
+                    <span class="red">SELECT * FROM products WHERE name LIKE '%' OR '1'='1%'</span><br><br>
+                    <span class="yellow">// Explanation:</span><br>
+                    - Attacker input: <code>' OR '1'='1</code><br>
+                    - The single quote breaks out of the SQL string literal.<br>
+                    - Condition <code>'1'='1'</code> is TRUE for every record.<br>
+                    - <span class="red">Vulnerability Result: ALL 8 records returned!</span>
+                </div>
+                <table>
+                    <thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th></tr></thead>
+                    <tbody>
+                        <tr><td>#1</td><td>Cardamom (Elaichi)</td><td>₹450</td><td>25 kg</td></tr>
+                        <tr><td>#2</td><td>Turmeric Powder (Haldi)</td><td>₹180</td><td>50 kg</td></tr>
+                        <tr><td>#3</td><td>Black Pepper (Kali Mirch)</td><td>₹320</td><td>40 kg</td></tr>
+                        <tr><td>#4</td><td>Cinnamon Sticks (Dalchini)</td><td>₹280</td><td>15 kg</td></tr>
+                        <tr><td>#5</td><td>Clove (Laung)</td><td>₹550</td><td>8 kg</td></tr>
+                        <tr><td>#6</td><td>Ginger Powder (Saunth)</td><td>₹150</td><td>30 kg</td></tr>
+                        <tr><td>#7</td><td>Bay Leaf (Tej Patta)</td><td>₹90</td><td>0 kg</td></tr>
+                        <tr><td>#8</td><td>Nutmeg (Jaiphal)</td><td>₹420</td><td>12 kg</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- AFTER -->
+            <div class="card success">
+                <span class="badge success">✅ After: Secure (Parameterized Query)</span>
+                <h3>Route: <code>GET /api/products/search?q=' OR '1'='1</code></h3>
+                <div class="code-box">
+                    <span class="yellow">// Parameterized Prepared Statement:</span><br>
+                    <span class="green">SELECT * FROM products WHERE name LIKE ?</span><br>
+                    <span class="cyan">Bound Parameter: ["%' OR '1'='1%"]</span><br><br>
+                    <span class="yellow">// Explanation:</span><br>
+                    - SQL query structure is compiled BEFORE parameter binding.<br>
+                    - Attacker payload is treated purely as a literal string value.<br>
+                    - Quotes and operators have NO syntactic meaning.<br>
+                    - <span class="green">Defense Result: Safe empty set (0 records match).</span>
+                </div>
+                <table>
+                    <thead><tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th></tr></thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center; color: #94a3b8; padding: 25px;">
+                            No spice items found matching literal keyword <code>' OR '1'='1</code>.<br>
+                            Database integrity intact. Zero data leaked.
+                        </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
