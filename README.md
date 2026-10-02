@@ -1,4 +1,4 @@
-﻿# Assignment 2 – EL Herbs and Spices Shop
+# Assignment 2 – EL Herbs and Spices Shop
 
 **Course:** 23EEL43H Web Programming  
 **Branch:** Electrical & Computer Engineering (Seventh Semester B.Tech - 2026)  
@@ -213,6 +213,7 @@ bash scripts/test_validation_curl.sh
 
 | Commit Hash | Commit Message |
 |:---|:---|
+| `c031481` | **Docs:** Removed all emojis from README.md |
 | `3fa4683` | **Week 4 - Final:** Comprehensive README update with Week 4 documentation, REST API spec, and SQL injection proofs |
 | `bd71166` | **Week 4 - Day 5:** MySQL database integration with connection pool, parameterized CRUD queries, SQL injection demo & defense |
 | `e97e316` | **Week 4 - Day 4:** Database schema design in SQL, CRUD operations, and SQL vs NoSQL comprehensive comparison |
