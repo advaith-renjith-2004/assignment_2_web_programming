@@ -1,0 +1,55 @@
+# Netlify Configuration - EL Herbs and Spices Shop
+# Week 5: Hosting, Deployment, Security and Release
+
+[build]
+  publish = "."
+  command = "# no build needed"
+
+# Environment Variables default fallback
+[build.environment]
+  NODE_VERSION = "20.11.0"
+
+# Clean routing and friendly redirects
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/products"
+  to = "/admin_products.html"
+  status = 200
+
+# Security, Caching, and Content Protection Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' http://localhost:5000 http://127.0.0.1:5000 https://*.onrender.com https://el-herbs-backend.onrender.com;"
+
+# Aggressive immutable caching for static spice images
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache-Control headers for CSS stylesheets
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+# Cache-Control headers for JavaScript scripts
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
