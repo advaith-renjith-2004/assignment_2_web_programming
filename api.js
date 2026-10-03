@@ -1,12 +1,22 @@
-﻿/* ==============================================================================
+/* ==============================================================================
    EL Herbs and Spices Shop - Client API Helper (api.js)
    Course: 23EEL43H Web Programming | Assignment # 2
    Week 4 - Day 1 & Day 2: Frontend-Backend Integration & Products REST Client
    ============================================================================== */
 
+// Week 5 Day 3: Cloud Render API Endpoint Configuration
+// Production endpoints point to the deployed Render Web Service.
+const RENDER_PROD_API_URL = 'https://el-herbs-backend.onrender.com';
+const LOCAL_DEV_API_URL = 'http://localhost:5000';
+
+const isLocalhost = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || 
+     window.location.hostname === '127.0.0.1' || 
+     window.location.hostname === '');
+
 const API_BASE_URL = (typeof window !== 'undefined' && window.API_BASE_URL)
     ? window.API_BASE_URL
-    : 'http://localhost:5000';
+    : (isLocalhost ? LOCAL_DEV_API_URL : RENDER_PROD_API_URL);
 
 // ==============================================================================
 // DAY 1: TASK MANAGEMENT API FUNCTIONS
