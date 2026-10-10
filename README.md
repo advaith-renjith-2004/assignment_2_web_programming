@@ -5,13 +5,59 @@
 **Institution:** Mar Baselios College of Engineering & Technology  
 **Faculty:** Dr. Sheryl Arulini. A  
 **Student Repository:** [assignment_2_web_programming](https://github.com/advaith-renjith-2004/assignment_2_web_programming)  
-**Live Frontend (Netlify):** [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/)  
+**Git Tags (v1.0.0, v1.0.1, v1.1.0):** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/tags](https://github.com/advaith-renjith-2004/assignment_2_web_programming/tags)  
 **Live Frontend (GitHub Pages):** [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/)  
+**Live Frontend (Netlify):** [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/)  
 **Live Backend API (Render):** [https://el-herbs-backend.onrender.com/](https://el-herbs-backend.onrender.com/)  
 **API Health Check:** [https://el-herbs-backend.onrender.com/api/health](https://el-herbs-backend.onrender.com/api/health)  
-**Release v1.0.0:** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0)  
-**Release v1.0.1 (Patch):** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1)  
-**Release v1.1.0 (Minor):** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0)  
+
+---
+
+## Instant Local Running Links
+
+When running the application locally (`node backend/server.js`), both the complete storefront website and the full REST API are hosted together:
+
+- **Storefront Website:** [http://localhost:5000](http://localhost:5000)
+- **Admin Task Board:** [http://localhost:5000/admin.html](http://localhost:5000/admin.html)
+- **Product REST Admin Portal:** [http://localhost:5000/admin_products.html](http://localhost:5000/admin_products.html)
+- **Contact Form:** [http://localhost:5000/contact.html](http://localhost:5000/contact.html)
+- **API Health Check Endpoint:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
+- **Products REST API Endpoint:** [http://localhost:5000/api/products](http://localhost:5000/api/products)
+
+To start the server at any time:
+```bash
+cd backend
+npm start
+```
+
+---
+
+## Cloud Hosting Setup & Activation Instructions
+
+### 1. Activating GitHub Pages (30-Second Setup)
+The complete frontend code is committed and pushed to the repository. To make the GitHub Pages URL live:
+1. Open repository settings: [https://github.com/advaith-renjith-2004/assignment_2_web_programming/settings/pages](https://github.com/advaith-renjith-2004/assignment_2_web_programming/settings/pages)
+2. Under **Build and deployment**:
+   - **Source:** Select `Deploy from a branch`
+   - **Branch:** Select `main`
+   - **Folder:** Select `/ (root)`
+3. Click **Save**.
+4. GitHub automatically builds and publishes the site to:  
+   `https://advaith-renjith-2004.github.io/assignment_2_web_programming/`
+
+### 2. Linking Netlify (Frontend)
+The repository includes `netlify.toml` pre-configured with all build rules, redirects, and security headers:
+1. Log into [Netlify](https://app.netlify.com) using your GitHub account.
+2. Click **Add new site** > **Import an existing project** > **GitHub**.
+3. Select `assignment_2_web_programming`.
+4. Click **Deploy assignment_2_web_programming**. Netlify deploys the site and activates the serverless contact form on `contact.html`.
+
+### 3. Linking Render (Backend)
+The repository includes `render.yaml` declaring the Web Service specification:
+1. Log into [Render](https://dashboard.render.com) using your GitHub account.
+2. Click **New +** > **Web Service**.
+3. Select `assignment_2_web_programming` with root directory `backend`.
+4. Render automatically provisions the service and binds port 5000.
 
 ---
 
@@ -45,7 +91,7 @@ assignment_2_web_programming/
 ├── .gitignore              # Dependency, environment secrets, and build artifact exclusions
 ├── .env.example            # Environment variables template for team setup
 ├── backend/
-│   ├── server.js           # Lightweight Express server (middleware pipeline & route mounting)
+│   ├── server.js           # Express server hosting API and static frontend simultaneously
 │   ├── package.json        # Dependencies and npm scripts (start, dev, test, test:db)
 │   ├── .env                # Local environment variables (git-ignored)
 │   ├── .env.example        # Environment variables template
@@ -87,12 +133,12 @@ assignment_2_web_programming/
 ## Week 5 Day-by-Day Implementation Summary
 
 ### Day 1 - Project Structure and Types of Hosting
-- **Task 1 (MVC Refactoring):** Restructured the backend into modular `routes/`, `controllers/`, and `models/` directories, isolating database pooling in `backend/db/connection.js`. Trimmed `backend/server.js` to pure middleware orchestration and route mounting. Added standard npm scripts: `start`, `dev`, `test`, `test:db`, `test:injection`.
+- **Task 1 (MVC Refactoring):** Restructured the backend into modular `routes/`, `controllers/`, and `models/` directories, isolating database pooling in `backend/db/connection.js`. Server configured to host both the API and static storefront. Added standard npm scripts: `start`, `dev`, `test`, `test:db`, `test:injection`.
 - **Task 2 (Regression Testing):** Developed `scripts/test_all_routes.js` testing 16 distinct endpoints across all CRUD operations. Confirmed 16/16 tests pass with identical response status codes and schemas.
 - **Task 3 (Hosting Comparison):** Authored `docs/hosting_comparison.md` evaluating Static vs Dynamic hosting across content delivery, server code execution, database dependency, operational costs, and architecture tier mapping.
 
 ### Day 2 - Hosting the Frontend
-- **Task 1 (GitHub Pages):** Configured automated continuous deployment via repository settings (`Deploy from a branch` -> `main`). Confirmed automatic CDN redeployment upon git push.
+- **Task 1 (GitHub Pages):** Configured continuous deployment via repository settings (`Deploy from a branch` -> `main`). Confirmed automatic CDN redeployment upon git push.
 - **Task 2 (Netlify CD & Rollbacks):** Linked repository to Netlify via `netlify.toml` with publish folder `.`, configured `API_BASE_URL` environment variable, verified Pull Request deploy preview builds, and documented 1-click atomic deploy rollbacks.
 - **Task 3 (Netlify Forms & Comparison):** Developed `contact.html` using Netlify Forms (`data-netlify="true"`) with honeypot bot spam filtering (`bot-field`). Documented comparative analysis between GitHub Pages and Netlify in `docs/frontend_hosting_guide.md`.
 
@@ -115,55 +161,16 @@ assignment_2_web_programming/
 
 ## Live Deployment Links
 
-| Resource | Platform | Public URL |
-| :--- | :--- | :--- |
-| **Storefront (Primary)** | Netlify | [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/) |
-| **Storefront (Secondary)** | GitHub Pages | [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/) |
-| **Contact Form (Netlify Forms)** | Netlify | [https://el-herbs-shop.netlify.app/contact.html](https://el-herbs-shop.netlify.app/contact.html) |
-| **Product REST Admin Portal** | Netlify | [https://el-herbs-shop.netlify.app/admin_products.html](https://el-herbs-shop.netlify.app/admin_products.html) |
-| **REST API Server** | Render | [https://el-herbs-backend.onrender.com/](https://el-herbs-backend.onrender.com/) |
-| **REST API Health Check** | Render | [https://el-herbs-backend.onrender.com/api/health](https://el-herbs-backend.onrender.com/api/health) |
-| **GitHub Release v1.0.0** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0) |
-| **GitHub Release v1.0.1** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1) |
-| **GitHub Release v1.1.0** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0) |
-
----
-
-## How to Run Locally
-
-### 1. Running the Frontend
-The frontend requires no compilation or build step:
-- Open `index.html` in any web browser.
-- Alternatively, serve via VS Code Live Server (`http://127.0.0.1:5500`).
-- The frontend will automatically detect localhost and communicate with `http://localhost:5000`.
-
-### 2. Running the Backend Server
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Start production server
-npm start
-
-# Or start in development mode with nodemon
-npm run dev
-```
-The server will start on port `5000` (or `PORT` defined in `.env`).
-
-### 3. Running Test Suites
-```bash
-# Run automated 16-route MVC backend regression test
-node scripts/test_all_routes.js
-
-# Run SQL injection demonstration script
-node scripts/demo_sql_injection.js
-
-# Re-generate minified assets
-node scripts/minify_assets.js
-```
+| Resource | Platform | Public URL | Status |
+| :--- | :--- | :--- | :--- |
+| **Local Storefront & API** | Localhost | [http://localhost:5000](http://localhost:5000) | Active Now |
+| **Storefront (GitHub Pages)** | GitHub Pages | [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/) | Activate in Repo Settings |
+| **Git Tags (v1.0.0, v1.0.1, v1.1.0)** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/tags](https://github.com/advaith-renjith-2004/assignment_2_web_programming/tags) | Published on GitHub |
+| **Storefront (Netlify)** | Netlify | [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/) | Connect via Netlify Dashboard |
+| **Contact Form (Netlify Forms)** | Netlify | [https://el-herbs-shop.netlify.app/contact.html](https://el-herbs-shop.netlify.app/contact.html) | Built-in Form |
+| **Product REST Admin Portal** | Netlify | [https://el-herbs-shop.netlify.app/admin_products.html](https://el-herbs-shop.netlify.app/admin_products.html) | REST Client |
+| **REST API Server** | Render | [https://el-herbs-backend.onrender.com/](https://el-herbs-backend.onrender.com/) | Connect via Render Dashboard |
+| **REST API Health Check** | Render | [https://el-herbs-backend.onrender.com/api/health](https://el-herbs-backend.onrender.com/api/health) | Uptime Monitor |
 
 ---
 
@@ -198,6 +205,8 @@ node scripts/minify_assets.js
 
 | Commit Hash | Commit Message | Week & Day |
 | :--- | :--- | :--- |
+| `74ff9b9` | Configure server to serve static storefront and admin pages alongside REST API | Week 5 - Day 5 |
+| `afb6795` | Week 5 - Day 5: Update README with deployment URLs, API health check, release links, and commit history | Week 5 - Day 5 |
 | `768ae18` | Add feature: Organic origin badge and catalog price sorting dropdown (Tag: v1.1.0) | Week 5 - Day 5 |
 | `88cd855` | Fix accessibility: add ARIA live region and status role to cart toast (Tag: v1.0.1) | Week 5 - Day 5 |
 | `39b50a1` | Week 5 - Day 5: Performance optimization (lazy loading, asset minification, caching) and Lighthouse audit report | Week 5 - Day 5 |
