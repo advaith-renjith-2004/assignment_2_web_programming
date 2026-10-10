@@ -266,6 +266,16 @@ function renderProducts(list) {
         cat.classList.add('category-tag');
         cat.textContent = product.category;
 
+        const organicBadge = document.createElement('span');
+        organicBadge.classList.add('category-tag');
+        organicBadge.style.backgroundColor = 'rgba(230, 194, 101, 0.15)';
+        organicBadge.style.color = '#e6c265';
+        organicBadge.style.marginLeft = '8px';
+        organicBadge.textContent = 'Organic Origin';
+
+        body.appendChild(cat);
+        body.appendChild(organicBadge);
+
         const title = document.createElement('h3');
         title.classList.add('product-name');
         title.textContent = product.name;
@@ -628,31 +638,41 @@ console.log("Products in Stock (filter stock > 0):", inStockProducts);
 const totalStockValue = products.reduce((acc, p) => acc + (p.price * p.stock), 0);
 console.log(`Total Stock Inventory Value (reduce): ₹${totalStockValue.toLocaleString()}`);
 
-// Task 3: Dual real-time filtering: search input event + category dropdown
+// Task 3: Real-time filtering and sorting: search input + category dropdown + price sort (v1.1.0 feature)
 function setupDualFilter() {
     const searchBox = document.getElementById('spiceSearch');
     const categorySelect = document.getElementById('categoryFilter');
+    const priceSortSelect = document.getElementById('priceSortSelect');
 
     function applyFilters() {
         const searchTerm = searchBox ? searchBox.value.trim().toLowerCase() : "";
         const selectedCat = categorySelect ? categorySelect.value : "All";
+        const sortOrder = priceSortSelect ? priceSortSelect.value : "default";
 
-        const filtered = products.filter(product => {
+        let filtered = products.filter(product => {
             const matchesSearch = product.name.toLowerCase().includes(searchTerm);
             const matchesCategory = (selectedCat === "All" || product.category === selectedCat);
             return matchesSearch && matchesCategory;
         });
 
+        if (sortOrder === 'price-asc') {
+            filtered.sort((a, b) => Number(a.price) - Number(b.price));
+        } else if (sortOrder === 'price-desc') {
+            filtered.sort((a, b) => Number(b.price) - Number(a.price));
+        }
+
         renderProducts(filtered);
-        console.log(`Dual Filter applied -> Query: "${searchTerm}", Category: "${selectedCat}", Matches: ${filtered.length}`);
+        console.log(`Filter applied -> Query: "${searchTerm}", Category: "${selectedCat}", Sort: "${sortOrder}", Matches: ${filtered.length}`);
     }
 
     if (searchBox) {
-        // Use input event as user types (Task 3 requirement)
         searchBox.addEventListener('input', applyFilters);
     }
     if (categorySelect) {
         categorySelect.addEventListener('change', applyFilters);
+    }
+    if (priceSortSelect) {
+        priceSortSelect.addEventListener('change', applyFilters);
     }
 }
 setupDualFilter();
