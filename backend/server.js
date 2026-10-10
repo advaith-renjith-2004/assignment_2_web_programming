@@ -1,4 +1,4 @@
-﻿/* ==============================================================================
+/* ==============================================================================
    EL Herbs and Spices Shop - Express Application Server (server.js)
    Course: 23EEL43H Web Programming | Assignment # 2.e
    Week 5 - Day 1 Task 1: MVC Architecture Refactored Server
@@ -6,6 +6,7 @@
    ============================================================================== */
 
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -60,8 +61,12 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/students', studentRoutes);
 
-// Root greeting endpoint
-app.get('/', (req, res) => {
+// Serve static frontend files (index.html, admin.html, admin_products.html, contact.html, css, js, images)
+const frontendPath = path.join(__dirname, '..');
+app.use(express.static(frontendPath));
+
+// API Root endpoint
+app.get('/api', (req, res) => {
     res.status(200).json({
         message: "Welcome to EL Herbs & Spices Shop REST API",
         documentation: "/api/health",
@@ -73,6 +78,11 @@ app.get('/', (req, res) => {
             students: "/api/students"
         }
     });
+});
+
+// Storefront Root Route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // ==============================================================================
