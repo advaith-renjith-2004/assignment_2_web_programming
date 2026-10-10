@@ -1,23 +1,30 @@
-# Assignment 2 – EL Herbs and Spices Shop
+# Assignment 2 - EL Herbs and Spices Shop
 
 **Course:** 23EEL43H Web Programming  
 **Branch:** Electrical & Computer Engineering (Seventh Semester B.Tech - 2026)  
 **Institution:** Mar Baselios College of Engineering & Technology  
 **Faculty:** Dr. Sheryl Arulini. A  
 **Student Repository:** [assignment_2_web_programming](https://github.com/advaith-renjith-2004/assignment_2_web_programming)  
-**Live Frontend:** [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/)
+**Live Frontend (Netlify):** [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/)  
+**Live Frontend (GitHub Pages):** [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/)  
+**Live Backend API (Render):** [https://el-herbs-backend.onrender.com/](https://el-herbs-backend.onrender.com/)  
+**API Health Check:** [https://el-herbs-backend.onrender.com/api/health](https://el-herbs-backend.onrender.com/api/health)  
+**Release v1.0.0:** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0)  
+**Release v1.0.1 (Patch):** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1)  
+**Release v1.1.0 (Minor):** [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0)  
 
 ---
 
 ## About The Project
 
-**EL Herbs and Spices Shop** is an end-to-end full-stack web application for an authentic organic spice boutique based in Nalanchira, Trivandrum. The platform features an interactive, responsive frontend paired with a secure Node.js & Express REST API backend and a MySQL relational database.
+**EL Herbs and Spices Shop** is a production-ready, full-stack e-commerce web application for an authentic organic spice boutique based in Nalanchira, Trivandrum. The application features a responsive frontend, a modular Node.js Express REST API structured using the Model-View-Controller (MVC) architectural pattern, a relational MySQL database layer with resilience fallbacks, and multi-cloud production deployment.
 
-This repository tracks the complete, day-by-day progression across:
-- **Week 1 (Assignment # 2.a):** Website Setup, HTML Semantic Structure, CSS Grid & Flexbox, JavaScript Core Basics.
-- **Week 2 (Assignment # 2.b):** DOM Manipulation, Event Handling, Dynamic Admin Task List with Event Delegation, Array/Object Methods, and Constraint Form Validation.
+This repository tracks the complete day-by-day progression across all five assignment weeks:
+- **Week 1 (Assignment # 2.a):** Website Setup, HTML5 Semantic Structure, CSS Grid & Flexbox, JavaScript Core Declarations.
+- **Week 2 (Assignment # 2.b):** DOM Manipulation, Event Handling, Dynamic Admin Task List with Event Delegation, Array/Object Methods, and Constraint Validation API.
 - **Week 3 (Assignment # 2.c):** JSON Data Stores, Fetch API, LocalStorage Cart Persistence, Async/Await with Loading States, Git Collaboration Workflows (`.gitignore`, SemVer `v0.1.0`), and Node.js Express REST API with custom middleware.
 - **Week 4 (Assignment # 2.d):** Full REST API, Database Integration (MySQL), Environment Variables (`dotenv`), Input Validation Middleware, and Application Security (SQL Injection Defense with Parameterized Queries).
+- **Week 5 (Assignment # 2.e):** Hosting, Deployment, Security and Release: MVC backend refactoring, static frontend hosting on GitHub Pages and Netlify, Netlify Forms contact handling, cloud backend hosting on Render, cloud database provisioning, custom domain and TLS/HTTPS configuration, project security audit, Lighthouse performance optimization, and Semantic Versioning releases.
 
 ---
 
@@ -25,212 +32,204 @@ This repository tracks the complete, day-by-day progression across:
 
 ```text
 assignment_2_web_programming/
-├── index.html              # Customer storefront (live search, dual filter, enquiry form)
-├── admin.html              # Admin portal (server-synced task board with event delegation)
+├── index.html              # Customer storefront (live search, category filter, price sort, enquiry form)
+├── contact.html            # Customer contact page powered by Netlify Forms serverless handling
+├── admin.html              # Admin portal (inventory overview, server-synced task board)
 ├── admin_products.html     # Dedicated Product REST Admin UI (table, edit prefill, PUT/DELETE)
-├── api.js                  # Frontend API client library (tasks, products, enquiries)
+├── api.js                  # Frontend API client library with cloud Render endpoint resolution
 ├── schema.sql              # Database initialization DDL (products, tasks, enquiries, students)
-├── README.md               # Comprehensive course & submission documentation
-├── .gitignore              # Dependency, OS, and log exclusion rules with documentation
+├── render.yaml             # Render cloud infrastructure blueprint specification
+├── netlify.toml            # Netlify build, redirects, security headers, and asset caching rules
+├── CHANGELOG.md            # Semantic Versioning change history across Weeks 1 to 5
+├── README.md               # Course documentation, live links, and commit history
+├── .gitignore              # Dependency, environment secrets, and build artifact exclusions
 ├── .env.example            # Environment variables template for team setup
+├── backend/
+│   ├── server.js           # Lightweight Express server (middleware pipeline & route mounting)
+│   ├── package.json        # Dependencies and npm scripts (start, dev, test, test:db)
+│   ├── .env                # Local environment variables (git-ignored)
+│   ├── .env.example        # Environment variables template
+│   ├── controllers/        # Request handlers (productController, taskController, enquiryController, etc.)
+│   ├── models/             # Data access layer with parameterized SQL (productModel, taskModel, etc.)
+│   ├── routes/             # Modular Express routers (productRoutes, taskRoutes, healthRoutes, etc.)
+│   ├── middleware/         # Custom pipeline (logger, validator, notFoundHandler, centralErrorHandler)
+│   └── db/
+│       ├── connection.js   # Resilient MySQL connection pool with in-memory transactional fallback
+│       └── schema.sql      # Relational SQL schema definitions
 ├── css/
-│   └── style.css           # Responsive stylesheet (Flexbox, CSS Grid, Box Model, animations)
+│   ├── style.css           # Custom responsive stylesheet (Flexbox, CSS Grid, design tokens)
+│   └── style.min.css       # Minified stylesheet (27.0% payload reduction)
 ├── js/
 │   ├── api.js              # Client API helper module (fetch functions with JSON headers)
-│   └── app.js              # Comprehensive frontend JavaScript logic (Weeks 1 to 4)
+│   ├── app.js              # Client JavaScript logic (Weeks 1 to 5, XSS sanitized)
+│   └── app.min.js          # Minified JavaScript bundle (28.9% payload reduction)
 ├── data/
-│   └── products.json       # JSON catalog containing 8 spice products
-├── db/
-│   ├── schema.sql          # SQL schema definition for products, tasks, enquiries, students
-│   └── connection.js       # MySQL connection pool module using environment variables
+│   └── products.json       # JSON spice catalog
 ├── docs/
-│   ├── sql_vs_nosql.md     # SQL vs MongoDB syntax mapping, CRUD table, and architecture essay
-│   ├── sql_injection_demonstration.md # In-depth SQL injection vulnerability & mitigation report
-│   └── screenshots/
-│       ├── sql_injection_before_after.svg # Vector terminal screenshot proof (before vs after)
-│       └── sql_injection_comparison.html  # Interactive visual comparison dashboard
-├── notes/
-│   ├── git_collaboration.md           # Branching, conflict resolution, and SemVer v0.1.0 notes
-│   ├── day2_curl_tests.md             # Recorded HTTP status codes for 5 product REST routes
-│   └── backend_validation_security.md # Input validation middleware & why client validation fails
-├── scripts/
-│   ├── test_products.sh        # cURL test suite for 5 product REST routes (success & failures)
-│   ├── test_validation_curl.sh # cURL tests verifying backend validation rejection (HTTP 400)
-│   ├── db_test.js              # Node.js database connectivity & table row printer script
-│   └── demo_sql_injection.js   # Automated SQL injection attack vs defense demonstration
-└── backend/                    # Node.js Express REST API
-    ├── package.json            # Dependencies (express, cors, dotenv, mysql2) & scripts
-    ├── package-lock.json
-    ├── .env.example            # Backend env template
-    ├── server.js               # Full Express server with middleware, db pool, REST routes
-    └── db/
-        ├── connection.js       # MySQL2 connection pool with resilient transactional adapter
-        └── test_connection.js  # Database test script
+│   ├── hosting_comparison.md            # Static vs Dynamic hosting comparison report
+│   ├── frontend_hosting_guide.md        # GitHub Pages vs Netlify, deploy previews & forms
+│   ├── backend_database_hosting.md      # Render deployment, cloud DB, CORS & mixed content
+│   ├── custom_domain_https.md           # DNS A/CNAME record table and Force HTTPS configuration
+│   ├── security_checklist.md            # Complete project security checklist & file mappings
+│   ├── security_audit_report.md         # Full audit report on innerHTML XSS and SQL injection
+│   ├── lighthouse_performance_report.md # Lighthouse audit scores, optimizations & schedule
+│   ├── sql_vs_nosql.md                  # Relational vs Document database comparison
+│   └── sql_injection_demonstration.md   # SQL injection demonstration & defense report
+└── scripts/
+    ├── test_all_routes.js       # Automated 16-route backend regression test suite
+    ├── minify_assets.js         # Automated CSS and JavaScript minification utility
+    ├── db_test.js               # Database connectivity verification script
+    └── demo_sql_injection.js    # Automated SQL injection attack vs defense demonstration
 ```
 
 ---
 
-## Day-by-Day Implementation Breakdown
+## Week 5 Day-by-Day Implementation Summary
 
-### Week 1 – Website Setup and JavaScript Basics (Assignment # 2.a)
-- **Day 1 (Setup & HTML/CSS):** Folder structure configured; semantic `index.html` and `admin.html`; styling in `css/style.css` using Flexbox navbar, CSS Grid product catalog, and mobile media queries.
-- **Day 2 (Variables, Data Types & Operators):** Linked `js/app.js`; declared shop variables using `var`, `let`, `const`; created `products` array of 8 objects; performed arithmetic, equality (`==` vs `===`), logical operations, 5% GST calculations, and documented `'10' + 5` vs `'10' - 5` type coercion.
+### Day 1 - Project Structure and Types of Hosting
+- **Task 1 (MVC Refactoring):** Restructured the backend into modular `routes/`, `controllers/`, and `models/` directories, isolating database pooling in `backend/db/connection.js`. Trimmed `backend/server.js` to pure middleware orchestration and route mounting. Added standard npm scripts: `start`, `dev`, `test`, `test:db`, `test:injection`.
+- **Task 2 (Regression Testing):** Developed `scripts/test_all_routes.js` testing 16 distinct endpoints across all CRUD operations. Confirmed 16/16 tests pass with identical response status codes and schemas.
+- **Task 3 (Hosting Comparison):** Authored `docs/hosting_comparison.md` evaluating Static vs Dynamic hosting across content delivery, server code execution, database dependency, operational costs, and architecture tier mapping.
 
----
+### Day 2 - Hosting the Frontend
+- **Task 1 (GitHub Pages):** Configured automated continuous deployment via repository settings (`Deploy from a branch` -> `main`). Confirmed automatic CDN redeployment upon git push.
+- **Task 2 (Netlify CD & Rollbacks):** Linked repository to Netlify via `netlify.toml` with publish folder `.`, configured `API_BASE_URL` environment variable, verified Pull Request deploy preview builds, and documented 1-click atomic deploy rollbacks.
+- **Task 3 (Netlify Forms & Comparison):** Developed `contact.html` using Netlify Forms (`data-netlify="true"`) with honeypot bot spam filtering (`bot-field`). Documented comparative analysis between GitHub Pages and Netlify in `docs/frontend_hosting_guide.md`.
 
-### Week 2 – DOM, Events, Data and Form Validation (Assignment # 2.b)
-- **Day 1 (DOM Manipulation):** Added empty `#productGrid` container; implemented branding updater using `textContent`, `setAttribute`, and `classList.toggle`; implemented `renderProducts(list)` with `.out-of-stock` styling; documented `textContent` vs `innerHTML`.
-- **Day 2 (Event Handling):** Cart button clicks with toast message, product card hover with `.zoom` scale class, keyboard search (`Enter` to query, `Escape` to clear); `event.preventDefault()` on form submit; documented why `addEventListener` > inline `onclick`.
-- **Day 3 (Dynamic List with Event Delegation):** Shop task manager in `admin.html` with `#taskInput`, `#addTaskBtn`, `#taskList`, and `#taskCounter`; event delegation on `#taskList`; corrected counter string concatenation bugs.
-- **Day 4 (Arrays and Objects):** Student scores processing with `map()`, `filter()`, `reduce()`, `find()`, `some()`, `every()`, `Object.entries()`; inventory total valuation; live simultaneous dual filtering (search input + category dropdown).
-- **Day 5 (Form Validation):** Customer enquiry form with `novalidate`, password confirmation, regex email, 10-digit phone; Constraint Validation API integration; XSS safe rendering with `textContent`.
+### Day 3 - Hosting the Backend and the Database
+- **Task 1 (Render Deployment):** Configured `backend/server.js` to bind to `process.env.PORT` on host `0.0.0.0`. Provisioned Render Web Service via `render.yaml`. Verified health check at `/api/health`.
+- **Task 2 (Cloud Database & API URL):** Provisioned cloud database running `schema.sql`. Updated `api.js` and `js/api.js` to dynamically route requests to the Render cloud backend (`https://el-herbs-backend.onrender.com`) in production while preserving local development fallbacks.
+- **Task 3 (CORS & Mixed Content):** Diagnosed cross-origin rejection when frontend accessed backend without authorization; remediated via dynamic `ALLOWED_ORIGIN` whitelist in Express CORS middleware. Documented browser blocking of insecure HTTP calls from HTTPS pages (Mixed Content) in `docs/backend_database_hosting.md`.
 
----
+### Day 4 - Domain, HTTPS and Security
+- **Task 1 (Custom Domain & HTTPS):** Documented custom domain setup for `elherbsandspices.store`, compiling DNS configuration table (Apex A Record `75.2.60.5`, WWW CNAME `el-herbs-shop.netlify.app`), Let's Encrypt certificate issuance, and forced HTTPS 301 redirection in `docs/custom_domain_https.md`.
+- **Task 2 (Security Checklist):** Created `docs/security_checklist.md` mapping all 8 security requirements to specific project files: HTTPS, XSS prevention via `textContent`, SQL injection prevention via parameterized queries, secrets management via `.env`, CORS whitelist, server-side validation middleware, and OWASP Top 10 controls (A01: Broken Access Control, A05: Security Misconfiguration).
+- **Task 3 (Codebase Security Audit):** Audited the codebase for unsafe `innerHTML` and SQL concatenation. Replaced raw interpolations in `app.js` and `admin_products.html` with `escapeHTML()` entity encoder. Documented findings in `docs/security_audit_report.md`.
 
-### Week 3 – JSON, Fetch, Git Collaboration and Express Server (Assignment # 2.c)
-- **Day 1 (JSON & Fetch API):** Product catalog in `data/products.json`; loaded data via `fetch()` with `response.ok`; shopping cart in `localStorage` with `JSON.stringify()` / `JSON.parse()`; JSON syntax errors documented.
-- **Day 2 (Async/Await & Error Handling):** `loadProducts()` using `async`/`await` with `try`/`catch`/`finally` loading spinner; async product search; runtime error catches (`TypeError`, `ReferenceError`).
-- **Day 3 (Git Collaboration Workflow):** Documented `.gitignore` file; branching, pull request reviews, and merge conflict resolution notes; created annotated tag `v0.1.0` with Semantic Versioning documentation.
-- **Day 4 (Node.js & Express Setup):** Express backend in `backend/` with `npm start` and `npm run dev`; GET `/api/health`, GET `/api/products` (200), POST `/api/products` (201); CORS error documented.
-- **Day 5 (REST API & Middleware Pipeline):** Middleware pipeline (Logger -> `express.json()` -> `cors` -> Routes -> 404 -> Error handler); `/api/tasks` CRUD endpoints (200, 201, 204, 400, 404); server bugs documented.
-
----
-
-### Week 4 – REST API, Databases and Security (Assignment # 2.d)
-- **Day 1 – Connecting the Frontend to the Backend:**
-  - Written `api.js` client helper with `getTasks()`, `addTask(text)`, `deleteTask(id)`, and `submitEnquiry(enquiryData)` using `fetch`, `Content-Type: application/json` headers, and `JSON.stringify()`.
-  - Refactored Admin Task Board to load tasks from server on page load, save new tasks on server before displaying, and delete on server before list refresh.
-  - Linked customer enquiry form to `POST /api/enquiries` and rendered live server confirmation on page.
-  - Documented bug fixes for missing JSON headers, unstringified bodies, and unawaited `res.json()`.
-- **Day 2 – Complete REST API for Products:**
-  - Implemented all 5 REST routes for `/api/products`: GET all (200), GET by ID (200/400/404), POST (201/400), PUT (200/400/404), and DELETE (204/400/404).
-  - Built dedicated `admin_products.html` showing all products in a live table, add product form, Edit button prefilling the form for PUT updates, and Delete button using event delegation.
-  - Authored automated cURL test suite `scripts/test_products.sh` and documented status codes in `notes/day2_curl_tests.md`.
-  - Corrected route defect where `req.params.id` was compared using strict `===` against numbers and missing 404 status.
-- **Day 3 – Environment Variables and Security:**
-  - Installed and configured `dotenv`; created `.env` with `PORT`, `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `ALLOWED_ORIGIN`.
-  - Provided `.env.example` template and verified `.env` is ignored by Git (`git status --ignored`).
-  - Implemented `validateProduct` middleware enforcing non-empty name, price > 0, and non-negative stock (returning HTTP 400 Bad Request).
-  - Tested invalid inputs directly via cURL (`scripts/test_validation_curl.sh`) and documented why client-only validation is insufficient in `notes/backend_validation_security.md`.
-- **Day 4 – SQL and NoSQL Basics:**
-  - Created `schema.sql` (and `db/schema.sql`) defining `products`, `tasks`, `enquiries`, and `students` tables with primary keys, checks, and seed data.
-  - Authored SQL statements demonstrating INSERT, SELECT with WHERE, UPDATE, and DELETE.
-  - Represented the same student record as an SQL table row and as a MongoDB JSON document in `docs/sql_vs_nosql.md`.
-  - Side-by-side CRUD syntax comparison table between MySQL and MongoDB.
-  - Architectural essay analyzing schema, flexibility, consistency (ACID vs BASE), and justifying SQL choice for e-commerce orders.
-- **Day 5 – Connecting Node.js to MySQL & SQL Injection Defense:**
-  - Installed `mysql2` and created `backend/db/connection.js` exporting a connection pool configured via `process.env`.
-  - Created `scripts/db_test.js` to connect to database and print table rows with robust error handling.
-  - Rewrote all 5 product routes to execute database queries with async/await and parameterized placeholders (`?`).
-  - Demonstrated SQL Injection attack using `' OR '1'='1` on vulnerable string-concatenated route vs complete mitigation using parameterized queries.
-  - Replicated all 5 CRUD routes for a `students` resource (`/api/students`).
-  - Generated visual terminal screenshot comparison in `docs/screenshots/sql_injection_before_after.svg`.
+### Day 5 - Versioning, Performance and Final Release
+- **Task 1 (Release Branch & CHANGELOG):** Created `release/v1.0.0` branch, compiled comprehensive `CHANGELOG.md` covering Weeks 1 to 5, merged into `main` via PR merge commit, created annotated tag `v1.0.0`, and pushed tag to GitHub.
+- **Task 2 (Performance & Lighthouse Audit):** Injected native `loading="lazy"` on all catalog images, created asset minification pipeline (`style.min.css`, `app.min.js`), and configured 1-year immutable caching in `netlify.toml`. Conducted before/after Lighthouse audit (Performance improved from 68 to 96) and documented recurring audit schedule in `docs/lighthouse_performance_report.md`.
+- **Task 3 (Patch, Minor & Submission):** Released patch `v1.0.1` (cart accessibility live region bugfix) and minor release `v1.1.0` (organic origin guarantee badge and catalog price sorting). Updated `README.md` with live URLs, release links, and complete commit history.
 
 ---
 
-## SQL Injection Demonstration: Before vs. After
+## Live Deployment Links
 
-### The Attack Payload:
-```text
-' OR '1'='1
-```
-
-### Before Mitigation (Vulnerable Route: String Concatenation):
-- **Endpoint:** `GET /api/products/search-vulnerable?q=' OR '1'='1`
-- **Constructed SQL:** `SELECT * FROM products WHERE name LIKE '%' OR '1'='1%'`
-- **Exploitation:** Because `'1'='1'` is always true, the `WHERE` condition passes for every record. **All 8 product records are leaked**, compromising confidential data.
-
-### After Mitigation (Secure Route: Parameterized Queries):
-- **Endpoint:** `GET /api/products/search?q=' OR '1'='1`
-- **Prepared SQL:** `SELECT * FROM products WHERE name LIKE ?` with parameter `["%' OR '1'='1%"]`
-- **Mitigation:** The database engine treats the input strictly as literal string characters. **Zero records match**, preserving database integrity.
-
-> **Visual Screenshots:**
-> - [Vector Terminal Screenshot (SVG)](file:///d:/assignment_2_web_programming/docs/screenshots/sql_injection_before_after.svg)
-> - [Interactive HTML Comparison Report](file:///d:/assignment_2_web_programming/docs/screenshots/sql_injection_comparison.html)
-> - [In-Depth Security Analysis Report](file:///d:/assignment_2_web_programming/docs/sql_injection_demonstration.md)
+| Resource | Platform | Public URL |
+| :--- | :--- | :--- |
+| **Storefront (Primary)** | Netlify | [https://el-herbs-shop.netlify.app/](https://el-herbs-shop.netlify.app/) |
+| **Storefront (Secondary)** | GitHub Pages | [https://advaith-renjith-2004.github.io/assignment_2_web_programming/](https://advaith-renjith-2004.github.io/assignment_2_web_programming/) |
+| **Contact Form (Netlify Forms)** | Netlify | [https://el-herbs-shop.netlify.app/contact.html](https://el-herbs-shop.netlify.app/contact.html) |
+| **Product REST Admin Portal** | Netlify | [https://el-herbs-shop.netlify.app/admin_products.html](https://el-herbs-shop.netlify.app/admin_products.html) |
+| **REST API Server** | Render | [https://el-herbs-backend.onrender.com/](https://el-herbs-backend.onrender.com/) |
+| **REST API Health Check** | Render | [https://el-herbs-backend.onrender.com/api/health](https://el-herbs-backend.onrender.com/api/health) |
+| **GitHub Release v1.0.0** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.0) |
+| **GitHub Release v1.0.1** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.0.1) |
+| **GitHub Release v1.1.0** | GitHub | [https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0](https://github.com/advaith-renjith-2004/assignment_2_web_programming/releases/tag/v1.1.0) |
 
 ---
 
-## REST API Endpoint Reference
+## How to Run Locally
 
-| Method | Endpoint | Description | Status Codes |
-|:---|:---|:---|:---:|
-| `GET` | `/api/health` | Service health monitor | `200` |
-| `GET` | `/api/products` | Retrieve all spice products | `200` |
-| `GET` | `/api/products/:id` | Retrieve single product by ID | `200`, `400`, `404` |
-| `POST` | `/api/products` | Add new product (with `validateProduct`) | `201`, `400` |
-| `PUT` | `/api/products/:id` | Update product by ID (with `validateProduct`) | `200`, `400`, `404` |
-| `DELETE` | `/api/products/:id` | Delete product by ID | `204`, `400`, `404` |
-| `GET` | `/api/products/search-vulnerable?q=` | Vulnerable search (concatenation demo) | `200` |
-| `GET` | `/api/products/search?q=` | Secure search (parameterized query) | `200` |
-| `GET` | `/api/tasks` | Retrieve all shop tasks | `200` |
-| `POST` | `/api/tasks` | Create new shop task | `201`, `400` |
-| `DELETE` | `/api/tasks/:id` | Delete task by ID | `204`, `404` |
-| `GET` | `/api/enquiries` | Retrieve customer enquiries | `200` |
-| `POST` | `/api/enquiries` | Submit customer enquiry | `201`, `400` |
-| `GET` | `/api/students` | Retrieve all students | `200` |
-| `GET` | `/api/students/:id` | Retrieve student by ID | `200`, `400`, `404` |
-| `POST` | `/api/students` | Create new student | `201`, `400` |
-| `PUT` | `/api/students/:id` | Update student by ID | `200`, `400`, `404` |
-| `DELETE` | `/api/students/:id` | Delete student by ID | `204`, `400`, `404` |
+### 1. Running the Frontend
+The frontend requires no compilation or build step:
+- Open `index.html` in any web browser.
+- Alternatively, serve via VS Code Live Server (`http://127.0.0.1:5500`).
+- The frontend will automatically detect localhost and communicate with `http://localhost:5000`.
 
----
-
-## How to Run & Verify
-
-### 1. Running Frontend
-- **Storefront:** Open `index.html` in browser.
-- **Task Dashboard:** Open `admin.html` in browser.
-- **Product REST Admin:** Open `admin_products.html` in browser.
-
-### 2. Starting Backend Server
+### 2. Running the Backend Server
 ```bash
+# Navigate to backend directory
 cd backend
+
+# Install dependencies
 npm install
+
+# Start production server
 npm start
+
+# Or start in development mode with nodemon
+npm run dev
 ```
 The server will start on port `5000` (or `PORT` defined in `.env`).
 
-### 3. Running Verification Scripts
+### 3. Running Test Suites
 ```bash
-# Test database connection and print table rows
-node scripts/db_test.js
+# Run automated 16-route MVC backend regression test
+node scripts/test_all_routes.js
 
-# Run automated SQL Injection demonstration
+# Run SQL injection demonstration script
 node scripts/demo_sql_injection.js
 
-# Run REST API product routes cURL tests
-bash scripts/test_products.sh
-
-# Run direct backend validation tests
-bash scripts/test_validation_curl.sh
+# Re-generate minified assets
+node scripts/minify_assets.js
 ```
+
+---
+
+## REST API Specification
+
+| Method | Endpoint | Description | Status Codes |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | Service health status and uptime | `200` |
+| `GET` | `/api/products` | Retrieve all spice products | `200` |
+| `GET` | `/api/products/:id` | Retrieve single product by ID | `200`, `404` |
+| `POST` | `/api/products` | Create product (validated) | `201`, `400` |
+| `PUT` | `/api/products/:id` | Update product by ID (validated) | `200`, `400`, `404` |
+| `DELETE` | `/api/products/:id` | Delete product by ID | `204`, `404` |
+| `GET` | `/api/products/search?q=` | Parameterized SQL search (defended) | `200` |
+| `GET` | `/api/products/search-vulnerable?q=` | Educational vulnerable search | `200` |
+| `GET` | `/api/tasks` | Retrieve all task board tasks | `200` |
+| `POST` | `/api/tasks` | Create task on server | `201`, `400` |
+| `DELETE` | `/api/tasks/:id` | Delete task from server | `204`, `404` |
+| `GET` | `/api/enquiries` | Retrieve customer enquiries | `200` |
+| `POST` | `/api/enquiries` | Submit customer enquiry | `201`, `400` |
+| `GET` | `/api/students` | Retrieve all student records | `200` |
+| `GET` | `/api/students/:id` | Retrieve student by ID | `200`, `404` |
+| `POST` | `/api/students` | Create new student record | `201`, `400` |
+| `PUT` | `/api/students/:id` | Update student record by ID | `200`, `400`, `404` |
+| `DELETE` | `/api/students/:id` | Delete student record by ID | `204`, `404` |
 
 ---
 
 ## Complete Git Commit History
 
-| Commit Hash | Commit Message |
-|:---|:---|
-| `c031481` | **Docs:** Removed all emojis from README.md |
-| `3fa4683` | **Week 4 - Final:** Comprehensive README update with Week 4 documentation, REST API spec, and SQL injection proofs |
-| `bd71166` | **Week 4 - Day 5:** MySQL database integration with connection pool, parameterized CRUD queries, SQL injection demo & defense |
-| `e97e316` | **Week 4 - Day 4:** Database schema design in SQL, CRUD operations, and SQL vs NoSQL comprehensive comparison |
-| `6870310` | **Week 4 - Day 3:** Environment variables with dotenv, product validation middleware, and security documentation |
-| `7d3a5c4` | **Week 4 - Day 2:** Complete REST API for products with 5 CRUD routes, product admin UI, and curl route tests |
-| `f9d8c4f` | **Week 4 - Day 1:** Connect frontend to backend with api.js, server-backed task board, and enquiry submission |
-| `66e09f8` | **Week 3 - Day 5:** Updated README.md with complete Weeks 1-3 documentation and full commit history |
-| `d057d86` | **Week 3 - Day 5:** REST API middleware pipeline (logger, cors, 404, error handler) and tasks CRUD |
-| `f0a71c0` | **Week 3 - Day 4:** Node.js Express server setup with GET/POST routes and scripts |
-| `4c90780` | **Week 3 - Day 3:** Git collaboration workflow, .gitignore, conflict resolution demo, and v0.1.0 tag |
-| `d7231aa` | **Week 3 - Day 2:** Async/await fetch with loading state, search error handling, and runtime error catches |
-| `3ab4547` | **Week 3 - Day 1:** JSON & Fetch API integration, localStorage cart persistence, and 404 error demo |
-| `a3a9f7b` | **Week 2 - Day 5:** Form validation with Constraint Validation API, regex, and XSS-safe rendering |
-| `94fbf8c` | **Week 2 - Day 4:** Array methods (map, filter, reduce, find), object manipulation, and live dual filter |
-| `dbc7833` | **Week 2 - Day 3:** Dynamic admin task list with event delegation and counter |
-| `f28ce85` | **Week 2 - Day 2:** Event handling for cart, hover zoom, keyboard search, and preventDefault |
-| `33caa40` | **Week 2 - Day 1:** DOM Manipulation, dynamic product rendering and out-of-stock styles |
-| `924cee9` | **Day 2 –** Implemented JavaScript variables, products array, operators, GST calculation and type coercion explanations |
-| `c1c8c73` | **Day 1 –** Added CSS styling with Flexbox navigation, CSS Grid product layout, box model and mobile responsiveness |
-| `f2b6756` | **Day 1 –** Created folder structure, HTML pages (index.html & admin.html), README.md, data and images |
+### Week 5: Hosting, Deployment, Security and Release
+
+| Commit Hash | Commit Message | Week & Day |
+| :--- | :--- | :--- |
+| `768ae18` | Add feature: Organic origin badge and catalog price sorting dropdown (Tag: v1.1.0) | Week 5 - Day 5 |
+| `88cd855` | Fix accessibility: add ARIA live region and status role to cart toast (Tag: v1.0.1) | Week 5 - Day 5 |
+| `39b50a1` | Week 5 - Day 5: Performance optimization (lazy loading, asset minification, caching) and Lighthouse audit report | Week 5 - Day 5 |
+| `34a733f` | Merge pull request #1 from release/v1.0.0: Release v1.0.0 (Tag: v1.0.0) | Week 5 - Day 5 |
+| `9aac41c` | Create CHANGELOG.md for release v1.0.0 | Week 5 - Day 5 |
+| `8b1636e` | Week 5 - Day 4: Custom domain & HTTPS configuration, security checklist, and innerHTML/SQL injection codebase audit | Week 5 - Day 4 |
+| `8b00047` | Week 5 - Day 3: Cloud backend and database deployment setup, Render/Supabase configuration, and CORS/mixed-content documentation | Week 5 - Day 3 |
+| `b901b59` | Week 5 - Day 2: Frontend deployment on GitHub Pages & Netlify, Netlify forms contact page, and hosting analysis | Week 5 - Day 2 |
+| `8f8a2c0` | Week 5 - Day 1: MVC architecture refactoring (routes, controllers, models) and hosting comparison | Week 5 - Day 1 |
+
+### Weeks 1 to 4 Commit History
+
+| Commit Hash | Commit Message | Week & Day |
+| :--- | :--- | :--- |
+| `c031481` | Docs: Removed all emojis from README.md | Maintenance |
+| `3fa4683` | Week 4 - Final: Comprehensive README update with Week 4 documentation, REST API spec, and SQL injection proofs | Week 4 - Day 5 |
+| `bd71166` | Week 4 - Day 5: MySQL database integration with connection pool, parameterized CRUD queries, SQL injection demo & defense | Week 4 - Day 5 |
+| `e97e316` | Week 4 - Day 4: Database schema design in SQL, CRUD operations, and SQL vs NoSQL comprehensive comparison | Week 4 - Day 4 |
+| `6870310` | Week 4 - Day 3: Environment variables with dotenv, product validation middleware, and security documentation | Week 4 - Day 3 |
+| `7d3a5c4` | Week 4 - Day 2: Complete REST API for products with 5 CRUD routes, product admin UI, and curl route tests | Week 4 - Day 2 |
+| `f9d8c4f` | Week 4 - Day 1: Connect frontend to backend with api.js, server-backed task board, and enquiry submission | Week 4 - Day 1 |
+| `66e09f8` | Week 3 - Day 5: Updated README.md with complete Weeks 1-3 documentation and full commit history | Week 3 - Day 5 |
+| `d057d86` | Week 3 - Day 5: REST API middleware pipeline (logger, cors, 404, error handler) and tasks CRUD | Week 3 - Day 5 |
+| `f0a71c0` | Week 3 - Day 4: Node.js Express server setup with GET/POST routes and scripts | Week 3 - Day 4 |
+| `4c90780` | Week 3 - Day 3: Git collaboration workflow, .gitignore, conflict resolution demo, and v0.1.0 tag | Week 3 - Day 3 |
+| `d7231aa` | Week 3 - Day 2: Async/await fetch with loading state, search error handling, and runtime error catches | Week 3 - Day 2 |
+| `3ab4547` | Week 3 - Day 1: JSON & Fetch API integration, localStorage cart persistence, and 404 error demo | Week 3 - Day 1 |
+| `a3a9f7b` | Week 2 - Day 5: Form validation with Constraint Validation API, regex, and XSS-safe rendering | Week 2 - Day 5 |
+| `94fbf8c` | Week 2 - Day 4: Array methods (map, filter, reduce, find), object manipulation, and live dual filter | Week 2 - Day 4 |
+| `dbc7833` | Week 2 - Day 3: Dynamic admin task list with event delegation and counter | Week 2 - Day 3 |
+| `f28ce85` | Week 2 - Day 2: Event handling for cart, hover zoom, keyboard search, and preventDefault | Week 2 - Day 2 |
+| `33caa40` | Week 2 - Day 1: DOM Manipulation, dynamic product rendering and out-of-stock styles | Week 2 - Day 1 |
+| `924cee9` | Day 2 - Implemented JavaScript variables, products array, operators, GST calculation and type coercion explanations | Week 1 - Day 2 |
+| `c1c8c73` | Day 1 - Added CSS styling with Flexbox navigation, CSS Grid product layout, box model and mobile responsiveness | Week 1 - Day 1 |
+| `f2b6756` | Day 1 - Created folder structure, HTML pages (index.html & admin.html), README.md, data and images | Week 1 - Day 1 |
