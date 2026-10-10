@@ -240,6 +240,7 @@ function renderProducts(list) {
         const img = document.createElement('img');
         img.setAttribute('src', `images/${imageMap[product.id] || 'logo.jpg'}`);
         img.setAttribute('alt', product.name);
+        img.setAttribute('loading', 'lazy');
 
         const badge = document.createElement('span');
         badge.classList.add('badge');
