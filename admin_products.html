@@ -227,6 +227,17 @@
                 setTimeout(() => { notice.style.display = 'none'; }, 5000);
             }
 
+            // Week 5 Day 4 Security Fix: Escape user inputs to prevent XSS in table rendering
+            function escapeHTML(str) {
+                if (str === null || str === undefined) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
             // Function to fetch and render all products (GET /api/products)
             async function fetchAndRenderProducts() {
                 try {
@@ -263,16 +274,16 @@
                     }
 
                     tr.innerHTML = `
-                        <td>#${p.id}</td>
-                        <td><strong>${p.name}</strong></td>
-                        <td>${p.category}</td>
+                        <td>#${escapeHTML(p.id)}</td>
+                        <td><strong>${escapeHTML(p.name)}</strong></td>
+                        <td>${escapeHTML(p.category)}</td>
                         <td>₹${Number(p.price).toFixed(2)}</td>
-                        <td>${p.stock} kg</td>
-                        <td><span class="status-indicator ${statusClass}">${statusLabel}</span></td>
+                        <td>${Number(p.stock)} kg</td>
+                        <td><span class="status-indicator ${statusClass}">${escapeHTML(statusLabel)}</span></td>
                         <td>
                             <div class="admin-action-btn-group">
-                                <button type="button" class="btn-edit-prod" data-id="${p.id}">Edit (PUT)</button>
-                                <button type="button" class="btn-delete-prod" data-id="${p.id}">Delete</button>
+                                <button type="button" class="btn-edit-prod" data-id="${escapeHTML(p.id)}">Edit (PUT)</button>
+                                <button type="button" class="btn-delete-prod" data-id="${escapeHTML(p.id)}">Delete</button>
                             </div>
                         </td>
                     `;

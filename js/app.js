@@ -6,6 +6,19 @@
 
 console.log("%c🌿 Welcome to EL Herbs & Spices Shop JS Console", "color: #e6c265; font-size: 16px; font-weight: bold; background: #0d2b22; padding: 6px 12px; border-radius: 4px;");
 
+// Week 5 Day 4 Security Fix: HTML entity escaper to prevent XSS when inserting
+// user-supplied text into innerHTML templates. Converts the five dangerous
+// characters (&, <, >, ", ') into their HTML entity equivalents.
+function escapeHTML(str) {
+    if (typeof str !== 'string') return String(str);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ==========================================================================
 // DAY 2 - TASK 1: Variables, Data Types & Core Declarations
 // ==========================================================================
@@ -164,7 +177,7 @@ function handleFormSubmit(event) {
     
     if (feedback) {
         feedback.className = 'form-feedback success';
-        feedback.innerHTML = `<strong>Thank you, ${name}!</strong> Your enquiry has been received. Our team will contact you shortly with spice availability and pricing.`;
+        feedback.innerHTML = `<strong>Thank you, ${escapeHTML(name)}!</strong> Your enquiry has been received. Our team will contact you shortly with spice availability and pricing.`;
         document.getElementById('enquiryForm').reset();
     }
 }
@@ -443,7 +456,7 @@ function initWeek2Day2Events() {
             const name = document.getElementById('fullName') ? document.getElementById('fullName').value : 'Customer';
             if (feedback) {
                 feedback.className = 'form-feedback success';
-                feedback.innerHTML = `<strong>Thank you, ${name}!</strong> Your enquiry has been received safely without page reload via event.preventDefault().`;
+                feedback.innerHTML = `<strong>Thank you, ${escapeHTML(name)}!</strong> Your enquiry has been received safely without page reload via event.preventDefault().`;
             }
         });
     }
@@ -805,7 +818,7 @@ function initWeek2Day5FormValidation() {
         const feedback = document.getElementById('formFeedback');
         if (isFormValid) {
             feedback.className = 'form-feedback success';
-            feedback.innerHTML = `<strong>Success!</strong> All fields validated successfully via Constraint Validation API. Thank you, ${nameInput.value}!`;
+            feedback.innerHTML = `<strong>Success!</strong> All fields validated successfully via Constraint Validation API. Thank you, ${escapeHTML(nameInput.value)}!`;
             console.log("Form successfully validated and submitted.");
         } else {
             feedback.className = 'form-feedback';
@@ -968,7 +981,7 @@ async function loadProductsAsync() {
     } catch (error) {
         console.error("[async/await Catch Block] Caught error loading products:", error.message);
         if (productGrid) {
-            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">⚠️ Unable to load spice catalog: ${error.message}</div>`;
+            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">Unable to load spice catalog: ${escapeHTML(error.message)}</div>`;
         }
     } finally {
         if (loadingEl) {
@@ -994,7 +1007,7 @@ async function performProductSearch() {
         if (searchBtn) searchBtn.disabled = true;
         if (loadingEl) {
             loadingEl.style.display = 'flex';
-            loadingEl.innerHTML = `<span class="spinner"></span> Searching for "${query}"...`;
+            loadingEl.innerHTML = `<span class="spinner"></span> Searching for "${escapeHTML(query)}"...`;
         }
 
         console.log(`[Search] Querying products matching: "${query}"`);
@@ -1016,7 +1029,7 @@ async function performProductSearch() {
             if (productGrid) {
                 productGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">
                     <h3>🔍 No matches found</h3>
-                    <p>No spices matching "<strong>${query}</strong>" were found in the catalog.</p>
+                    <p>No spices matching "<strong>${escapeHTML(query)}</strong>" were found in the catalog.</p>
                 </div>`;
             }
             console.log(`[Search] No matches found for "${query}".`);
@@ -1027,7 +1040,7 @@ async function performProductSearch() {
     } catch (err) {
         console.error("[Search Catch Block] Caught error during search:", err.message);
         if (productGrid) {
-            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">Search failed: ${err.message}</div>`;
+            productGrid.innerHTML = `<div class="error-msg" style="grid-column: 1/-1; text-align: center; padding: 2rem;">Search failed: ${escapeHTML(err.message)}</div>`;
         }
     } finally {
         // Re-enable search button and remove loading state in finally block
@@ -1234,7 +1247,7 @@ function initWeek4Day1EnquiryServerSubmit() {
                 if (feedback) {
                     feedback.className = 'form-feedback success';
                     feedback.style.display = 'block';
-                    feedback.innerHTML = `<strong>Server Response (${response.data ? '#' + response.data.id : 'Success'}):</strong> ${response.message || 'Enquiry successfully recorded!'}`;
+                    feedback.innerHTML = `<strong>Server Response (${response.data ? '#' + escapeHTML(String(response.data.id)) : 'Success'}):</strong> ${escapeHTML(response.message || 'Enquiry successfully recorded!')}`;
                 }
                 console.log("[Enquiry API] Server response:", response);
             }
